@@ -1,27 +1,47 @@
-import React from 'react';
+import React from "react";
+import { Link } from "react-router-dom"; // Import Link
+import "../index.css";
+
 const HomePage = () => {
   const projects = [
     {
-      title: 'Project 1: AutoForm Filler ',
-      description: 'Auto form filler that automatically fills online job application forms.',
-      link: 'https://github.com/Ibrahim2307/web_and_mobile_project1',
+      title: "Project 1: AutoForm Filler",
+      description: "Auto form filler that automatically fills online job application forms.",
+      link: "https://github.com/Ibrahim2307/web_and_mobile_project1",
     },
   ];
 
   return (
-    <div style={styles.container}>
-      <h1>Welcome to the Recipe Manager App</h1>
-      <p style={styles.intro}>
-        Organize, create, and discover amazing recipes. Start managing your favorite recipes today!
-      </p>
-      <section style={styles.projectsSection}>
-        <h2>Previous Projects</h2>
+    <div className="home-page">
+      <header>
+        <h1>Welcome to My Recipe Showcase!</h1>
+        <p>This app highlights popular recipes and my development projects.</p>
+      </header>
+
+      {/* Link to the Recipe Page */}
+      <section className="recipe-navigation">
+        <Link to="/recipes" className="recipe-link">
+          <button>Go to Recipe Page</button>
+        </Link>
+      </section>
+
+      <section className="featured-recipe">
+        <h2>Featured Recipe</h2>
+        <div className="recipe-card">
+          <h3>Classic Spaghetti Bolognese</h3>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente ea deserunt asperiores animi libero quas omnis quo deleniti, maiores blanditiis possimus cumque sunt dolores aut in quam molestiae iste nemo?
+          </p>
+        </div>
+      </section>
+
+      <section className="projects">
+        <h2>My Projects</h2>
         <ul>
           {projects.map((project, index) => (
-            <li key={index} style={styles.projectItem}>
-              <strong>{project.title}</strong>: {project.description} -{' '}
+            <li key={index}>
               <a href={project.link} target="_blank" rel="noopener noreferrer">
-                View Project
+                {project.title}
               </a>
             </li>
           ))}
@@ -29,25 +49,6 @@ const HomePage = () => {
       </section>
     </div>
   );
-};
-
-const styles = {
-  container: {
-    padding: '20px',
-    fontFamily: 'Arial, sans-serif',
-    textAlign: 'center',
-  },
-  intro: {
-    fontSize: '1.2rem',
-    marginBottom: '20px',
-  },
-  projectsSection: {
-    marginTop: '30px',
-    textAlign: 'left',
-  },
-  projectItem: {
-    marginBottom: '10px',
-  },
 };
 
 export default HomePage;
