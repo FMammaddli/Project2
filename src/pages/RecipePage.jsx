@@ -2,10 +2,11 @@ import React, { useState, useEffect } from "react";
 import RecipeCard from "./RecipeCard";
 
 const RecipePage = () => {
-  const [recipes, setRecipes] = useState([]);
+  const [recipes, setRecipes] = useState([]); // Initialize state as empty
+  
+  console.log("Before setting recipes:", recipes); // Log before useEffect runs
 
   useEffect(() => {
-    // Simulate data fetching
     const exampleRecipes = [
       {
         title: "Easy Chicken Curry",
@@ -18,16 +19,18 @@ const RecipePage = () => {
       },
     ];
 
-    console.log("Recipes Data:", exampleRecipes); // Debug
-    setRecipes(exampleRecipes);
-  }, []);
+    console.log("After setting recipes:", exampleRecipes); // Log example recipes
+    setRecipes(exampleRecipes); // Update state
+  }, []); // Runs once after component mounts
+
+  console.log("Current recipes state in render:", recipes); // Log the state during rendering
 
   return (
     <div>
       <h1>Recipe List</h1>
       {recipes.length > 0 ? (
         recipes.map((recipe, index) => (
-          <RecipeCard key={index} recipe={recipe} />
+          <RecipeCard key={index} recipe={recipe} /> // Pass recipe to RecipeCard
         ))
       ) : (
         <p>No recipes available.</p>

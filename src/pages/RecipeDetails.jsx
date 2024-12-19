@@ -7,9 +7,7 @@ const RecipeDetails = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("/db/database.json")
-      .then((res) => res.json())
-      .then((data) => {
+    fetch("/db/database.json").then((res) => res.json()).then((data) => {
         const foundRecipe = data.find((r) => r.id === parseInt(id));
         setRecipe(foundRecipe);
       });
