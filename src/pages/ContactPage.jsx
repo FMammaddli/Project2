@@ -42,10 +42,10 @@ const ContactPage = () => {
   };
 
   return (
-    <div style={styles.container}>
+    <div>
       <h1>Contact Me</h1>
-      <form style={styles.form} onSubmit={handleSubmit}>
-        <label style={styles.label}>
+      <form onSubmit={handleSubmit}>
+        <label>
           Subject:
           <input
             type="text"
@@ -53,10 +53,9 @@ const ContactPage = () => {
             value={formData.subject}
             onChange={handleChange}
             required
-            style={styles.input}
           />
         </label>
-        <label style={styles.label}>
+        <label>
           Email:
           <input
             type="email"
@@ -64,74 +63,23 @@ const ContactPage = () => {
             value={formData.email}
             onChange={handleChange}
             required
-            style={styles.input}
           />
         </label>
-        <label style={styles.label}>
+        <label>
           Message:
           <textarea
             name="message"
             value={formData.message}
             onChange={handleChange}
             required
-            style={styles.textarea}
           />
         </label>
-        <button type="submit" style={styles.button}>
+        <button type="submit">
           Send Message
         </button>
       </form>
-      {status && <p style={styles.status}>{status}</p>}
+      {status && <p>{status}</p>}
     </div>
   );
 };
-
-const styles = {
-  container: {
-    padding: '20px',
-    maxWidth: '600px',
-    margin: '0 auto',
-    fontFamily: 'Arial, sans-serif',
-  },
-  form: {
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  label: {
-    marginBottom: '15px',
-    fontSize: '1rem',
-  },
-  input: {
-    padding: '10px',
-    fontSize: '1rem',
-    border: '1px solid #ccc',
-    borderRadius: '5px',
-    marginTop: '5px',
-    width: '100%',
-  },
-  textarea: {
-    padding: '10px',
-    fontSize: '1rem',
-    border: '1px solid #ccc',
-    borderRadius: '5px',
-    marginTop: '5px',
-    width: '100%',
-    height: '100px',
-  },
-  button: {
-    padding: '10px 15px',
-    fontSize: '1rem',
-    backgroundColor: '#007bff',
-    color: '#fff',
-    border: 'none',
-    borderRadius: '5px',
-    cursor: 'pointer',
-  },
-  status: {
-    marginTop: '15px',
-    fontSize: '1rem',
-    color: '#555',
-  },
-};
-
 export default ContactPage;
