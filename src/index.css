@@ -85,3 +85,102 @@ body {
     max-width: 800px;
     background-color: #f9fafb;
   }
+
+  
+.recipe-card h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #1f2937;
+  margin-bottom: 0.75rem;
+}
+
+.recipe-card p,
+.recipe-card ul,
+.recipe-card ol {
+  margin: 0.75rem 0;
+  color: #4b5563;
+}
+
+.recipe-card ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+}
+
+.recipe-card ol {
+  list-style-type: decimal;
+  padding-left: 1.5rem;
+}
+
+.recipe-card strong {
+  display: block;
+  margin-top: 1rem;
+  font-weight: bold;
+}
+
+button {
+  margin-top: 1rem;
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  font-weight: bold;
+  background-color: #3b82f6;  
+  color: #ffffff;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+  background-color: #2563eb;
+  transform: translateY(-2px);
+}
+
+.projects {
+  margin-top: 2rem;
+  text-align: left;
+}
+
+.projects h2 {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.projects ul {
+  list-style: none;
+  padding: 0;
+}
+
+.projects li {
+  margin: 0.5rem 0;
+}
+
+.projects a {
+  color: #3b82f6;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.projects a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .featured-recipe,
+  .recipe-card {
+    width: 100%;
+    padding: 1rem;
+  }
+
+  header h1 {
+    font-size: 2rem;
+  }
+
+  header p {
+    font-size: 1rem;
+  }
+
+  button {
+    width: 100%;
+  }
+}
