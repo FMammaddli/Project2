@@ -1,100 +1,186 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
-    background-color: #f8f8f8;
+    font-family: "Inter", Arial, sans-serif;
+    background-color: #f3f4f6;
+    color: #374151;
   }
   
   .App {
     text-align: center;
+    padding: 2rem;
   }
   
   .home-page {
     padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   }
   
   header {
     margin-bottom: 2rem;
+    text-align: center;
   }
   
-  h1 {
-    color: #333;
-  }
-  
-  .featured-recipe {
-    background-color: #fff;
-    padding: 1rem;
-    margin: 1rem auto;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    width: 80%;
-  }
-  
-  .projects ul {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .projects li {
-    margin: 0.5rem 0;
-  }
-  
-  a {
-    color: #007bff;
-    text-decoration: none;
+  header h1 {
+    font-size: 2.5rem;
     font-weight: bold;
-  }
-  
-  a:hover {
-    text-decoration: underline;
-  }
-
-  .recipe-card {
-    border: 1px solid #ccc;
-    margin: 1rem auto;
-    padding: 1rem;
-    border-radius: 5px;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
-    max-width: 600px;
-    background-color: #fff;
-  }
-  
-  .recipe-card h2 {
+    color: #1f2937;
     margin-bottom: 0.5rem;
   }
   
-  .recipe-card p,
-  .recipe-card ul,
-  .recipe-card ol {
-    margin: 0.5rem 0;
+  header p {
+    font-size: 1.2rem;
+    color: #6b7280;
   }
   
-  .recipe-card ul {
-    list-style-type: disc;
-    padding-left: 1.5rem;
+  .links-container {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
   }
   
-  .recipe-card ol {
-    list-style-type: decimal;
-    padding-left: 1.5rem;
+  .links-container a {
+    text-decoration: none;
+    font-size: 1rem;
+    color: #ffffff;
+    background-color: #3b82f6;
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
   }
   
-  .recipe-card strong {
-    display: block;
-    margin-top: 0.5rem;
+  .links-container a:hover {
+    background-color: #2563eb;
+    transform: translateY(-2px);
+  }
+  
+  .featured-recipe {
+    background-color: #ffffff;
+    padding: 1.5rem;
+    margin: 1.5rem auto;
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 800px;
+    text-align: left;
+  }
+  
+  .featured-recipe h2 {
+    font-size: 1.8rem;
     font-weight: bold;
+    color: #1f2937;
+    margin-bottom: 1rem;
   }
   
-  button {
-    margin: 0.5rem;
-    padding: 0.5rem;
-    cursor: pointer;
+  .recipe-card {
+    border: 1px solid #e5e7eb;
+    margin: 1.5rem auto;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    max-width: 800px;
+    background-color: #f9fafb;
   }
 
+  
+.recipe-card h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #1f2937;
+  margin-bottom: 0.75rem;
+}
 
-/*
-Tailwind added
-*/
+.recipe-card p,
+.recipe-card ul,
+.recipe-card ol {
+  margin: 0.75rem 0;
+  color: #4b5563;
+}
+
+.recipe-card ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+}
+
+.recipe-card ol {
+  list-style-type: decimal;
+  padding-left: 1.5rem;
+}
+
+.recipe-card strong {
+  display: block;
+  margin-top: 1rem;
+  font-weight: bold;
+}
+
+button {
+  margin-top: 1rem;
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  font-weight: bold;
+  background-color: #3b82f6;  
+  color: #ffffff;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+  background-color: #2563eb;
+  transform: translateY(-2px);
+}
+
+.projects {
+  margin-top: 2rem;
+  text-align: left;
+}
+
+.projects h2 {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.projects ul {
+  list-style: none;
+  padding: 0;
+}
+
+.projects li {
+  margin: 0.5rem 0;
+}
+
+.projects a {
+  color: #3b82f6;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.projects a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .featured-recipe,
+  .recipe-card {
+    width: 100%;
+    padding: 1rem;
+  }
+
+  header h1 {
+    font-size: 2rem;
+  }
+
+  header p {
+    font-size: 1rem;
+  }
+
+  button {
+    width: 100%;
+  }
+}
