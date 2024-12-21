@@ -1,15 +1,16 @@
-{
-    "recipes": [
-      {
-        "id": 1,
-        "title": "",
-        "description": "",
-        "ingredients": [],
-        "steps": [],
-        "tags": [],
-        "difficulty": "",
-        "lastUpdated": ""
-      }
-    ],
-    "messages": []
+[
+  {
+    "id": 1,
+    "title": "Chicken ",
+    "description": "asefsaf.",
+    "difficulty": "Easy",
+    "lastUpdated": "2024"
+  },
+  {
+    "id": 2,
+    "title": " Spaghetti ",
+    "description": "asefasefasef.",
+    "difficulty": "Medium",
+    "lastUpdated": "2024"
   }
+]
