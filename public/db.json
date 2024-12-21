@@ -1,0 +1,18 @@
+{
+  "recipes": [
+    {
+      "id": 1,
+      "title": "Chicken Fille",
+      "description": "Lorem.",
+      "difficulty": "Easy",
+      "lastUpdated": "2024"
+    },
+    {
+      "id": 2,
+      "title": "Loremn",
+      "description": "Lorem.",
+      "difficulty": "Hard",
+      "lastUpdated": "2024"
+    }
+  ]
+}

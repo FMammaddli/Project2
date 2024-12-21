@@ -1,40 +1,56 @@
 import React, { useState, useEffect } from "react";
-import RecipeCard from "./RecipeCard";
 
 const RecipePage = () => {
-  const [recipes, setRecipes] = useState([]); // Initialize state as empty
-  
-  console.log("Before setting recipes:", recipes); // Log before useEffect runs
+  const [recipes, setRecipes] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const exampleRecipes = [
-      {
-        title: "Easy Chicken Curry",
-        description: "This easy staple chicken curry is perfect for family dinners.",
-        ingredients: ["Chicken", "Yogurt", "Spices", "Garlic", "Ginger"],
-        steps: ["Marinate chicken", "Cook with spices", "Add yogurt", "Simmer until cooked"],
-        tags: ["Easy", "Gluten-free", "Dinner"],
-        difficulty: "Easy",
-        lastUpdated: "2024-01-20T10:00:00Z",
-      },
-    ];
-
-    console.log("After setting recipes:", exampleRecipes); // Log example recipes
-    setRecipes(exampleRecipes); // Update state
-  }, []); // Runs once after component mounts
-
-  console.log("Current recipes state in render:", recipes); // Log the state during rendering
+    fetch("http://localhost:3001/recipes")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setRecipes(data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching recipes:", error);
+        setLoading(false);
+      });
+  }, []);
 
   return (
-    <div>
-      <h1>Recipe List</h1>
-      {recipes.length > 0 ? (
-        recipes.map((recipe, index) => (
-          <RecipeCard key={index} recipe={recipe} /> // Pass recipe to RecipeCard
-        ))
-      ) : (
-        <p>No recipes available.</p>
-      )}
+    <div className="recipe-page">
+      <header>
+        <h1>Recipe List</h1>
+        <p>Explore a collection of amazing recipes.</p>
+      </header>
+
+      <section className="recipe-list">
+        <h2>All Recipes</h2>
+        {loading ? (
+          <p>Loading recipes...</p>
+        ) : recipes.length > 0 ? (
+          recipes.map((recipe) => (
+            <div key={recipe.id} className="recipe-card">
+              <h3>{recipe.title}</h3>
+              <p>{recipe.description}</p>
+              <p>
+                <strong>Difficulty:</strong> {recipe.difficulty}
+              </p>
+              <p>
+                <strong>Last Updated:</strong>{" "}
+                {new Date(recipe.lastUpdated).toLocaleDateString()}
+              </p>
+            </div>
+          ))
+        ) : (
+          <p>No recipes found.</p>
+        )}
+      </section>
     </div>
   );
 };
