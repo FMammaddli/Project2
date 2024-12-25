@@ -3,6 +3,11 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HomePage from './HomePage';
 import RecipePage from './RecipePage';
 import ContactPage from './ContactPage';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import HomePage from './HomePage';
+import RecipePage from './RecipePage';
+import ContactPage from './ContactPage';
 
 function App() {
   return (
