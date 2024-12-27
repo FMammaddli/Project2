@@ -4,14 +4,16 @@
       "id": 1,
       "title": "Chicken Fille",
       "description": "Lorem.",
+      "ingredients": ["Chicken", "Flour", "Eggs", "Milk", "Sugar", "Salt"],
       "difficulty": "Easy",
       "lastUpdated": "2024"
     },
     {
       "id": 2,
-      "title": "Loremn",
+      "title": "Pasta",
       "description": "Lorem.",
-      "difficulty": "Hard",
+      "ingredients": ["Pasta", "Tomato Sauce", "Cheese", "Garlic"],
+      "difficulty": "Medium",
       "lastUpdated": "2024"
     }
   ]
