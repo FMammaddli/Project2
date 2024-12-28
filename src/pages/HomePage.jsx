@@ -66,7 +66,19 @@ const HomePage = () => {
             <h3>{featuredRecipe.title}</h3>
             <p>{featuredRecipe.description}</p>
             <p>
+              <strong>ID:</strong> {featuredRecipe.id}
+            </p>
+            <p>
               <strong>Difficulty:</strong> {featuredRecipe.difficulty}
+            </p>
+            <p>
+              <strong>Ingredients:</strong> {featuredRecipe.ingredients.join(", ")}
+            </p>
+            <p>
+              <strong>Steps:</strong> {featuredRecipe.steps.join(", ")}
+            </p>
+            <p>
+              <strong>Tags:</strong> {featuredRecipe.tags.join(", ")}
             </p>
             <p>
               <strong>Last Updated:</strong>{" "}

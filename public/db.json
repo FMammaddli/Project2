@@ -3,17 +3,21 @@
     {
       "id": 1,
       "title": "Chicken Fille",
-      "description": "Lorem.",
-      "ingredients": ["Chicken", "Flour", "Eggs", "Milk", "Sugar", "Salt"],
-      "difficulty": "Easy",
+      "description": "A tender, juicy chicken fillet.",
+      "ingredients": ["Chicken", "Flour", "Eggs", "Sugar", "Salt"],
+      "steps": ["Cook the chicken", "Mix the ingredients together", "Cook the mixture until it's done."],
+      "tags": ["Dinner", "Healthy"],
+      "difficulty": "Medium",
       "lastUpdated": "2024"
     },
     {
       "id": 2,
       "title": "Pasta",
-      "description": "Lorem.",
+      "description": "A classic pasta dish.",
       "ingredients": ["Pasta", "Tomato Sauce", "Cheese", "Garlic"],
-      "difficulty": "Medium",
+      "steps": ["Boil the pasta", "Cook the sauce", "Mix everything together"],
+      "tags": ["Dinner", "Italian"],
+      "difficulty": "Easy",
       "lastUpdated": "2024"
     }
   ]
