@@ -1,94 +1,117 @@
 import React, { useState, useEffect } from "react";
 import RecipeCard from "./RecipeCard";
+import { supabase } from "./createClient";
 
 const RecipePage = () => {
   const [recipes, setRecipes] = useState([]);
+  const [isCreating, setIsCreating] = useState(false);
   const [newRecipe, setNewRecipe] = useState({
     title: "",
     description: "",
-    ingredients: [],
+    ingredients: "",
     steps: "",
     tags: "",
     difficulty: "Easy",
   });
-  const [ingredientInput, setIngredientInput] = useState("");
 
   useEffect(() => {
-    fetch("http://localhost:3001/recipes")
-      .then((response) => response.json())
-      .then((data) => setRecipes(data))
-      .catch((error) => console.error("Error fetching recipes:", error));
+    const fetchRecipes = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("Recipes")
+          .select("*")
+          .order("lastUpdated", { ascending: false });
+        if (error) {
+          console.error(error);
+          return;
+        }
+        setRecipes(data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchRecipes();
   }, []);
 
-  const handleAddIngredient = (e) => {
-    if (e.key === "Enter" && ingredientInput.trim()) {
-      setNewRecipe({
-        ...newRecipe,
-        ingredients: [...newRecipe.ingredients, ingredientInput.trim()],
-      });
-      setIngredientInput(""); // Clear input after adding
-      e.preventDefault(); // Prevent form submission on Enter
+  const handleUpdateRecipe = (updatedRecipe) => {
+    setRecipes((prev) =>
+      prev.map((recipe) => (recipe.id === updatedRecipe.id ? updatedRecipe : recipe))
+    );
+  };
+
+  const handleDeleteRecipe = async (id) => {
+    try {
+      const { error } = await supabase
+        .from("Recipes")
+        .delete()
+        .eq("id", id);
+      if (error) {
+        console.error(error);
+        return;
+      }
+      setRecipes((prev) => prev.filter((recipe) => recipe.id !== id));
+    } catch (err) {
+      console.error(err);
     }
   };
 
-  const handleAddRecipe = (e) => {
-    e.preventDefault();
-    const recipeToAdd = {
-      ...newRecipe,
-      steps: newRecipe.steps.split(","),
-      tags: newRecipe.tags.split(","),
-      lastUpdated: new Date().toISOString(),
-    };
-
-    fetch("http://localhost:3001/recipes", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(recipeToAdd),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setRecipes([...recipes, data]);
-        setNewRecipe({
-          title: "",
-          description: "",
-          ingredients: [],
-          steps: "",
-          tags: "",
-          difficulty: "Easy",
-        });
-      })
-      .catch((error) => console.error("Error adding recipe:", error));
-  };
-
-  const handleDeleteRecipe = (id) => {
-    fetch(`http://localhost:3001/recipes/${id}`, {
-      method: "DELETE",
-    })
-      .then(() => {
-        setRecipes(recipes.filter((recipe) => recipe.id !== id));
-      })
-      .catch((error) => console.error("Error deleting recipe:", error));
-  };
-
-  const handleEditRecipe = (updatedRecipe) => {
-    fetch(`http://localhost:3001/recipes/${updatedRecipe.id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(updatedRecipe),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setRecipes(
-          recipes.map((recipe) => (recipe.id === data.id ? data : recipe))
-        );
-      })
-      .catch((error) => console.error("Error updating recipe:", error));
+  const handleCreate = async () => {
+    try {
+      const ingredientsArray = newRecipe.ingredients
+        .split(",")
+        .map((item) => item.trim())
+        .filter((item) => item);
+      const stepsArray = newRecipe.steps
+        .split(",")
+        .map((item) => item.trim())
+        .filter((item) => item);
+      const tagsArray = newRecipe.tags
+        .split(",")
+        .map((item) => item.trim())
+        .filter((item) => item);
+      const { data, error } = await supabase
+        .from("Recipes")
+        .insert([
+          {
+            title: newRecipe.title,
+            description: newRecipe.description,
+            ingredients: ingredientsArray,
+            steps: stepsArray,
+            tags: tagsArray,
+            difficulty: newRecipe.difficulty,
+            lastUpdated: new Date().toISOString(),
+          },
+        ])
+        .select();
+      if (error) {
+        console.error(error);
+        return;
+      }
+      if (data && data.length > 0) {
+        setRecipes((prev) => [data[0], ...prev]);
+      }
+      setIsCreating(false);
+      setNewRecipe({
+        title: "",
+        description: "",
+        ingredients: "",
+        steps: "",
+        tags: "",
+        difficulty: "Easy",
+      });
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
     <div className="recipe-page">
-      <section className="add-recipe">
-        <form onSubmit={handleAddRecipe} className="recipe-form">
+      <h2>Recipe List</h2>
+      <button onClick={() => setIsCreating(!isCreating)}>
+        {isCreating ? "Cancel" : "Create Recipe"}
+      </button>
+      {isCreating && (
+        <div>
           <label>
             Title
             <input
@@ -97,10 +120,8 @@ const RecipePage = () => {
               onChange={(e) =>
                 setNewRecipe({ ...newRecipe, title: e.target.value })
               }
-              required
             />
           </label>
-
           <label>
             Description
             <textarea
@@ -108,26 +129,18 @@ const RecipePage = () => {
               onChange={(e) =>
                 setNewRecipe({ ...newRecipe, description: e.target.value })
               }
-              required
             />
           </label>
-
           <label>
-            Ingredients
+            Ingredients (comma-separated)
             <input
               type="text"
-              value={ingredientInput}
-              onChange={(e) => setIngredientInput(e.target.value)}
-              onKeyDown={handleAddIngredient}
-              placeholder="Press Enter to add an ingredient"
+              value={newRecipe.ingredients}
+              onChange={(e) =>
+                setNewRecipe({ ...newRecipe, ingredients: e.target.value })
+              }
             />
-            <ul>
-              {newRecipe.ingredients.map((ingredient, index) => (
-                <li key={index}>{ingredient}</li>
-              ))}
-            </ul>
           </label>
-
           <label>
             Steps (comma-separated)
             <input
@@ -138,7 +151,6 @@ const RecipePage = () => {
               }
             />
           </label>
-
           <label>
             Tags (comma-separated)
             <input
@@ -149,7 +161,6 @@ const RecipePage = () => {
               }
             />
           </label>
-
           <label>
             Difficulty
             <select
@@ -163,19 +174,16 @@ const RecipePage = () => {
               <option value="Hard">Hard</option>
             </select>
           </label>
-
-          <button type="submit">Add Recipe</button>
-        </form>
-      </section>
-
+          <button onClick={handleCreate}>Create</button>
+        </div>
+      )}
       <section className="recipe-list">
-        <h2>Recipe List</h2>
         {recipes.map((recipe) => (
           <RecipeCard
             key={recipe.id}
             recipe={recipe}
+            onUpdate={handleUpdateRecipe}
             onDelete={handleDeleteRecipe}
-            onEdit={handleEditRecipe}
           />
         ))}
       </section>

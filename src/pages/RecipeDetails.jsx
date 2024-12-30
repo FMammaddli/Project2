@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { supabase } from "./createClient";
 
 const RecipeDetails = () => {
   const { id } = useParams();
@@ -7,10 +8,22 @@ const RecipeDetails = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("/db/database.json").then((res) => res.json()).then((data) => {
-        const foundRecipe = data.find((r) => r.id === parseInt(id));
-        setRecipe(foundRecipe);
-      });
+    const fetchRecipeDetails = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("Recipes") 
+          .select("*")
+          .eq("id", id)
+          .single();
+
+        if (error) throw error;
+        setRecipe(data);
+      } catch (err) {
+        console.error("Error fetching recipe details:", err);
+      }
+    };
+
+    fetchRecipeDetails();
   }, [id]);
 
   if (!recipe) return <div>Loading...</div>;
@@ -19,22 +32,34 @@ const RecipeDetails = () => {
     <div>
       <h1>{recipe.title}</h1>
       <p>{recipe.description}</p>
+
       <h3>Ingredients:</h3>
       <ul>
-        {recipe.ingredients.map((ing, index) => (
-          <li key={index}>{ing}</li>
-        ))}
+        {Array.isArray(recipe.ingredients) &&
+          recipe.ingredients.map((ing, idx) => <li key={idx}>{ing}</li>)}
       </ul>
+
       <h3>Steps:</h3>
       <ol>
-        {recipe.steps.map((step, index) => (
-          <li key={index}>{step}</li>
-        ))}
+        {Array.isArray(recipe.steps) &&
+          recipe.steps.map((step, idx) => <li key={idx}>{step}</li>)}
       </ol>
-      <p><strong>Tags:</strong> {recipe.tags.join(", ")}</p>
-      <p><strong>Difficulty:</strong> {recipe.difficulty}</p>
-      <p><strong>Last Updated:</strong> {new Date(recipe.lastUpdated).toLocaleString()}</p>
-      <button onClick={() => navigate("/")}>Back to Recipes</button>
+
+      <p>
+        <strong>Tags:</strong>{" "}
+        {Array.isArray(recipe.tags) && recipe.tags.join(", ")}
+      </p>
+
+      <p>
+        <strong>Difficulty:</strong> {recipe.difficulty}
+      </p>
+
+      <p>
+        <strong>Last Updated:</strong>{" "}
+        {new Date(recipe.lastUpdated).toLocaleString()}
+      </p>
+
+      <button onClick={() => navigate("/recipe")}>Back to Recipes</button>
     </div>
   );
 };
