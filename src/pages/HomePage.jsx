@@ -1,26 +1,32 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { supabase } from "./createClient";
 
 const HomePage = () => {
   const [featuredRecipe, setFeaturedRecipe] = useState(null);
 
   useEffect(() => {
-    fetch("http://localhost:3001/recipes")
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then((data) => {
-        if (data.length > 0) {
-          setFeaturedRecipe(data[0]); 
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching featured recipe:", error);
-      });
+    fetchFeaturedRecipe();
   }, []);
+
+  const fetchFeaturedRecipe = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("Recipes")
+        .select("*")
+        .order("lastUpdated", { ascending: false })
+        .limit(1);
+      if (error) {
+        console.error(error);
+        return;
+      }
+      if (data && data.length > 0) {
+        setFeaturedRecipe(data[0]);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   const projects = [
     {
@@ -38,7 +44,6 @@ const HomePage = () => {
           <p className="text-lg">Discover, create, and share amazing recipes with ease!</p>
         </div>
       </header>
-
       <section className="projects">
         <h2>My Projects</h2>
         <ul>
@@ -52,25 +57,43 @@ const HomePage = () => {
           ))}
         </ul>
       </section>
-
       <section className="navigation">
-        <Link to="/recipes">
+        <Link to="/recipe">
           <button>View Recipes</button>
         </Link>
       </section>
-
-      <section className="featured-recipe">
-        <h2>Featured Recipe</h2>
+      <section className="featured-recipe my-8 mx-auto max-w-2xl">
+        <h2 className="text-2xl font-bold mb-4">Featured Recipe</h2>
         {featuredRecipe ? (
-          <div className="recipe-card">
-            <h3>{featuredRecipe.title}</h3>
-            <p>{featuredRecipe.description}</p>
-            <p>
+          <div className="bg-white shadow-md rounded p-6">
+            <p className="text-sm text-gray-500 mb-2">
+              <strong>ID:</strong> {featuredRecipe.id}
+            </p>
+            <h3 className="text-xl font-semibold mb-2">{featuredRecipe.title}</h3>
+            <p className="mb-2">
+              <strong>Description:</strong> {featuredRecipe.description}
+            </p>
+            {Array.isArray(featuredRecipe.tags) && featuredRecipe.tags.length > 0 && (
+              <p className="mb-2">
+                <strong>Tags:</strong> {featuredRecipe.tags.join(", ")}
+              </p>
+            )}
+            {Array.isArray(featuredRecipe.ingredients) &&
+              featuredRecipe.ingredients.length > 0 && (
+                <p className="mb-2">
+                  <strong>Ingredients:</strong> {featuredRecipe.ingredients.join(", ")}
+                </p>
+              )}
+            {Array.isArray(featuredRecipe.steps) && featuredRecipe.steps.length > 0 && (
+              <p className="mb-2">
+                <strong>Steps:</strong> {featuredRecipe.steps.join(", ")}
+              </p>
+            )}
+            <p className="mb-2">
               <strong>Difficulty:</strong> {featuredRecipe.difficulty}
             </p>
             <p>
-              <strong>Last Updated:</strong>{" "}
-              {new Date(featuredRecipe.lastUpdated).toLocaleDateString()}
+              <strong>Last Updated:</strong> {new Date(featuredRecipe.lastUpdated).toLocaleDateString()}
             </p>
           </div>
         ) : (
@@ -80,4 +103,5 @@ const HomePage = () => {
     </div>
   );
 };
+
 export default HomePage;
