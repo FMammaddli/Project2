@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import RecipeCard from "./RecipeCard";
 import { supabase } from "./createClient";
 
@@ -13,6 +13,10 @@ const RecipePage = () => {
     tags: "",
     difficulty: "Easy",
   });
+  const [difficultyFilter, setDifficultyFilter] = useState("");
+  const [tagFilter, setTagFilter] = useState("");
+  const [sortOption, setSortOption] = useState("");
+  const [titleSearch, setTitleSearch] = useState("");
 
   useEffect(() => {
     const fetchRecipes = async () => {
@@ -35,21 +39,18 @@ const RecipePage = () => {
 
   const handleUpdateRecipe = (updatedRecipe) => {
     setRecipes((prev) =>
-      prev.map((recipe) => (recipe.id === updatedRecipe.id ? updatedRecipe : recipe))
+      prev.map((r) => (r.id === updatedRecipe.id ? updatedRecipe : r))
     );
   };
 
   const handleDeleteRecipe = async (id) => {
     try {
-      const { error } = await supabase
-        .from("Recipes")
-        .delete()
-        .eq("id", id);
+      const { error } = await supabase.from("Recipes").delete().eq("id", id);
       if (error) {
         console.error(error);
         return;
       }
-      setRecipes((prev) => prev.filter((recipe) => recipe.id !== id));
+      setRecipes((prev) => prev.filter((r) => r.id !== id));
     } catch (err) {
       console.error(err);
     }
@@ -87,9 +88,7 @@ const RecipePage = () => {
         console.error(error);
         return;
       }
-      if (data && data.length > 0) {
-        setRecipes((prev) => [data[0], ...prev]);
-      }
+      if (data && data.length > 0) setRecipes((prev) => [data[0], ...prev]);
       setIsCreating(false);
       setNewRecipe({
         title: "",
@@ -104,14 +103,98 @@ const RecipePage = () => {
     }
   };
 
+  const filteredAndSortedRecipes = useMemo(() => {
+    let output = [...recipes];
+    if (titleSearch) {
+      output = output.filter((recipe) =>
+        recipe.title.toLowerCase().includes(titleSearch.toLowerCase())
+      );
+    }
+    if (difficultyFilter) {
+      output = output.filter(
+        (r) => r.difficulty.toLowerCase() === difficultyFilter.toLowerCase()
+      );
+    }
+    if (tagFilter) {
+      output = output.filter((r) => {
+        if (!r.tags || !Array.isArray(r.tags)) return false;
+        return r.tags.some((tag) =>
+          tag.toLowerCase().includes(tagFilter.toLowerCase())
+        );
+      });
+    }
+    switch (sortOption) {
+      case "title-asc":
+        output.sort((a, b) => a.title.localeCompare(b.title));
+        break;
+      case "title-desc":
+        output.sort((a, b) => b.title.localeCompare(a.title));
+        break;
+      case "diff-asc":
+        output.sort((a, b) => a.difficulty.localeCompare(b.difficulty));
+        break;
+      case "diff-desc":
+        output.sort((a, b) => b.difficulty.localeCompare(a.difficulty));
+        break;
+      case "updated-asc":
+        output.sort(
+          (a, b) => new Date(a.lastUpdated) - new Date(b.lastUpdated)
+        );
+        break;
+      case "updated-desc":
+        output.sort(
+          (a, b) => new Date(b.lastUpdated) - new Date(a.lastUpdated)
+        );
+        break;
+      default:
+        break;
+    }
+    return output;
+  }, [recipes, difficultyFilter, tagFilter, sortOption, titleSearch]);
+
   return (
     <div className="recipe-page">
       <h2>Recipe List</h2>
-      <button onClick={() => setIsCreating(!isCreating)}>
-        {isCreating ? "Cancel" : "Create Recipe"}
-      </button>
+      <div className="filter-sort-controls">
+        <button onClick={() => setIsCreating(!isCreating)}>
+          {isCreating ? "Cancel" : "Create Recipe"}
+        </button>
+        <input
+          type="text"
+          placeholder="Search by title"
+          value={titleSearch}
+          onChange={(e) => setTitleSearch(e.target.value)}
+        />
+        <select
+          value={difficultyFilter}
+          onChange={(e) => setDifficultyFilter(e.target.value)}
+        >
+          <option value="">All Difficulties</option>
+          <option value="Easy">Easy</option>
+          <option value="Medium">Medium</option>
+          <option value="Hard">Hard</option>
+        </select>
+        <input
+          type="text"
+          placeholder="Filter by tag"
+          value={tagFilter}
+          onChange={(e) => setTagFilter(e.target.value)}
+        />
+        <select
+          value={sortOption}
+          onChange={(e) => setSortOption(e.target.value)}
+        >
+          <option value="">Sort by...</option>
+          <option value="title-asc">Title (A-Z)</option>
+          <option value="title-desc">Title (Z-A)</option>
+          <option value="diff-asc">Difficulty (A-Z)</option>
+          <option value="diff-desc">Difficulty (Z-A)</option>
+          <option value="updated-asc">Last Updated (Oldest)</option>
+          <option value="updated-desc">Last Updated (Newest)</option>
+        </select>
+      </div>
       {isCreating && (
-        <div>
+        <div className="create-recipe-form">
           <label>
             Title
             <input
@@ -178,7 +261,7 @@ const RecipePage = () => {
         </div>
       )}
       <section className="recipe-list">
-        {recipes.map((recipe) => (
+        {filteredAndSortedRecipes.map((recipe) => (
           <RecipeCard
             key={recipe.id}
             recipe={recipe}
