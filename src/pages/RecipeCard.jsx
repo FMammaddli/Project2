@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
+import "../index.css";
 
 export default function RecipeCard({ recipe, onUpdate, onDelete }) {
   const [editMode, setEditMode] = useState(false);
-
   const [title, setTitle] = useState(recipe?.title || "");
   const [description, setDescription] = useState(recipe?.description || "");
   const [tags, setTags] = useState(recipe?.tags || []);
@@ -21,7 +21,7 @@ export default function RecipeCard({ recipe, onUpdate, onDelete }) {
     setSteps(recipe?.steps || []);
     setDifficulty(recipe?.difficulty || "Easy");
     setLastUpdated(recipe?.lastUpdated ? new Date(recipe.lastUpdated) : new Date());
-    setEditMode(false); 
+    setEditMode(false);
   }, [recipe]);
 
   const handleSave = () => {
@@ -33,9 +33,8 @@ export default function RecipeCard({ recipe, onUpdate, onDelete }) {
       ingredients,
       steps,
       difficulty,
-      lastUpdated: new Date().toISOString(), // or keep existing
+      lastUpdated: new Date().toISOString(),
     };
-    
     if (typeof onUpdate === "function") {
       onUpdate(updatedRecipe);
     }
@@ -64,92 +63,82 @@ export default function RecipeCard({ recipe, onUpdate, onDelete }) {
   const stepsString = Array.isArray(steps) ? steps.join(", ") : steps;
 
   return (
-    <div className="bg-white shadow-md rounded p-6 my-4 max-w-lg">
+    <div className="recipe-card my-4">
       {!editMode && (
-        <>
-          <p className="text-sm text-gray-500 mb-2">
+        <div className="recipe-card-view">
+          <p className="recipe-label">
             <strong>ID:</strong> {recipe.id}
           </p>
-          <h3 className="text-xl font-semibold mb-2">{recipe.title}</h3>
-          <p className="mb-2">
+          <h3 className="recipe-title">{recipe.title}</h3>
+          <p className="recipe-description">
             <strong>Description:</strong> {recipe.description}
           </p>
           {Array.isArray(recipe.tags) && recipe.tags.length > 0 && (
-            <p className="mb-2">
+            <p className="recipe-tags">
               <strong>Tags:</strong> {recipe.tags.join(", ")}
             </p>
           )}
           {Array.isArray(recipe.ingredients) && recipe.ingredients.length > 0 && (
-            <p className="mb-2">
+            <p className="recipe-ingredients">
               <strong>Ingredients:</strong> {recipe.ingredients.join(", ")}
             </p>
           )}
           {Array.isArray(recipe.steps) && recipe.steps.length > 0 && (
-            <p className="mb-2">
+            <p className="recipe-steps">
               <strong>Steps:</strong> {recipe.steps.join(", ")}
             </p>
           )}
-          <p className="mb-2">
+          <p className="recipe-difficulty">
             <strong>Difficulty:</strong> {recipe.difficulty}
           </p>
-          <p className="mb-4">
-            <strong>Last Updated:</strong>{" "}
-            {new Date(recipe.lastUpdated).toLocaleDateString()}
+          <p>
+            <strong>Last Updated:</strong> {new Date(recipe.lastUpdated).toLocaleDateString()}
           </p>
-          <button
-            className="inline-block mr-2 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-            onClick={() => setEditMode(true)}
-          >
-            Edit
-          </button>
-          <button
-            className="inline-block bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
-            onClick={handleDelete}
-          >
-            Delete
-          </button>
-        </>
+          <div className="button-group">
+            <button className="btn btn-edit" onClick={() => setEditMode(true)}>
+              Edit
+            </button>
+            <button className="btn btn-delete" onClick={handleDelete}>
+              Delete
+            </button>
+          </div>
+        </div>
       )}
-
       {editMode && (
-        <>
-          <p className="text-sm text-gray-500 mb-2">
+        <div className="edit-form">
+          <p className="recipe-label">
             <strong>ID:</strong> {recipe.id}
           </p>
-
-          <div className="mb-4">
-            <label className="block font-semibold mb-1">Title:</label>
+          <div className="edit-field">
+            <label>Title:</label>
             <input
-              className="border border-gray-300 rounded w-full p-2"
+              className="edit-input"
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
             />
           </div>
-
-          <div className="mb-4">
-            <label className="block font-semibold mb-1">Description:</label>
+          <div className="edit-field">
+            <label>Description:</label>
             <textarea
-              className="border border-gray-300 rounded w-full p-2"
+              className="edit-textarea"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             />
           </div>
-
-          <div className="mb-4">
-            <label className="block font-semibold mb-1">Tags (comma-separated):</label>
+          <div className="edit-field">
+            <label>Tags (comma-separated):</label>
             <input
-              className="border border-gray-300 rounded w-full p-2"
+              className="edit-input"
               type="text"
               value={tagsString}
-              onChange={(e) => setTags(e.target.value.split(",").map((tag) => tag.trim()))}
+              onChange={(e) => setTags(e.target.value.split(",").map((t) => t.trim()))}
             />
           </div>
-
-          <div className="mb-4">
-            <label className="block font-semibold mb-1">Ingredients (comma-separated):</label>
+          <div className="edit-field">
+            <label>Ingredients (comma-separated):</label>
             <input
-              className="border border-gray-300 rounded w-full p-2"
+              className="edit-input"
               type="text"
               value={ingredientsString}
               onChange={(e) =>
@@ -157,21 +146,19 @@ export default function RecipeCard({ recipe, onUpdate, onDelete }) {
               }
             />
           </div>
-
-          <div className="mb-4">
-            <label className="block font-semibold mb-1">Steps (comma-separated):</label>
+          <div className="edit-field">
+            <label>Steps (comma-separated):</label>
             <input
-              className="border border-gray-300 rounded w-full p-2"
+              className="edit-input"
               type="text"
               value={stepsString}
-              onChange={(e) => setSteps(e.target.value.split(",").map((stp) => stp.trim()))}
+              onChange={(e) => setSteps(e.target.value.split(",").map((st) => st.trim()))}
             />
           </div>
-
-          <div className="mb-4">
-            <label className="block font-semibold mb-1">Difficulty:</label>
+          <div className="edit-field">
+            <label>Difficulty:</label>
             <select
-              className="border border-gray-300 rounded w-full p-2"
+              className="edit-select"
               value={difficulty}
               onChange={(e) => setDifficulty(e.target.value)}
             >
@@ -180,30 +167,21 @@ export default function RecipeCard({ recipe, onUpdate, onDelete }) {
               <option value="Hard">Hard</option>
             </select>
           </div>
-
-          <p className="text-gray-700 mb-4">
+          <p className="recipe-label">
             Last Updated Time: {lastUpdated.toLocaleString()}
           </p>
-
-          <button
-            className="inline-block mr-2 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
-            onClick={handleSave}
-          >
-            Save
-          </button>
-          <button
-            className="inline-block mr-2 bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500"
-            onClick={handleCancel}
-          >
-            Cancel
-          </button>
-          <button
-            className="inline-block bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
-            onClick={handleDelete}
-          >
-            Delete
-          </button>
-        </>
+          <div className="button-group">
+            <button className="btn btn-edit" onClick={handleSave}>
+              Save
+            </button>
+            <button className="btn" onClick={handleCancel}>
+              Cancel
+            </button>
+            <button className="btn btn-delete" onClick={handleDelete}>
+              Delete
+            </button>
+          </div>
+        </div>
       )}
     </div>
   );

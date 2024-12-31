@@ -16,7 +16,6 @@ const RecipePage = () => {
   const [difficultyFilter, setDifficultyFilter] = useState("");
   const [tagFilter, setTagFilter] = useState("");
   const [sortOption, setSortOption] = useState("");
-  // Renamed to a more general term, but you can keep it as `titleSearch` if desired
   const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
@@ -109,7 +108,6 @@ const RecipePage = () => {
   const filteredAndSortedRecipes = useMemo(() => {
     let output = [...recipes];
 
-    // Updated search to check title, description, and ingredients
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
       output = output.filter((recipe) => {
@@ -126,7 +124,6 @@ const RecipePage = () => {
             ingredient.toLowerCase().includes(query)
           );
 
-        // Return true if any of the three fields match
         return titleMatch || descriptionMatch || ingredientsMatch;
       });
     }
@@ -183,10 +180,9 @@ const RecipePage = () => {
         <button onClick={() => setIsCreating(!isCreating)}>
           {isCreating ? "Cancel" : "Create Recipe"}
         </button>
-        {/* Updated placeholder to indicate searching in title, description, and ingredients */}
         <input
           type="text"
-          placeholder="Search recipes (title, description, or ingredients)"
+          placeholder="Search"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />

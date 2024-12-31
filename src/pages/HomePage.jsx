@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "./createClient";
+import "../index.css";
 
 const HomePage = () => {
   const [featuredRecipe, setFeaturedRecipe] = useState(null);
@@ -38,30 +39,51 @@ const HomePage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-100 via-white to-green-200">
-      <header className="bg-green-500 text-white py-8 shadow-lg">
-        <div className="container mx-auto text-center">
-          <h1 className="text-5xl font-bold mb-4">Welcome to Recipe Manager</h1>
+      <header className="bg-green-500 text-white shadow-lg">
+        <div className="container mx-auto text-center py-6">
+          <h1 className="text-5xl font-bold mb-2">Welcome to Recipe Manager</h1>
           <p className="text-lg">Discover, create, and share amazing recipes with ease!</p>
         </div>
+        <nav className="navbar">
+          <ul className="nav-links">
+            <li>
+              <Link to="/" className="nav-link">
+                Home
+              </Link>
+            </li>
+            <li>
+              <Link to="/recipe" className="nav-link">
+                Recipes
+              </Link>
+            </li>
+            <li>
+              <Link to="/contact" className="nav-link">
+                Contact
+              </Link>
+            </li>
+          </ul>
+        </nav>
       </header>
-      <section className="projects">
-        <h2>My Projects</h2>
-        <ul>
+
+      <section className="my-projects-section">
+        <h2 className="my-projects-title">My Projects</h2>
+        <ul className="my-projects-list">
           {projects.map((project, index) => (
-            <li key={index}>
-              <a href={project.link} target="_blank" rel="noopener noreferrer">
+            <li key={index} className="my-projects-item">
+              <a
+                href={project.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="my-projects-link"
+              >
                 {project.title}
               </a>
-              <p>{project.description}</p>
+              <p className="my-projects-description">{project.description}</p>
             </li>
           ))}
         </ul>
       </section>
-      <section className="navigation">
-        <Link to="/recipe">
-          <button>View Recipes</button>
-        </Link>
-      </section>
+
       <section className="featured-recipe my-8 mx-auto max-w-2xl">
         <h2 className="text-2xl font-bold mb-4">Featured Recipe</h2>
         {featuredRecipe ? (
@@ -93,7 +115,8 @@ const HomePage = () => {
               <strong>Difficulty:</strong> {featuredRecipe.difficulty}
             </p>
             <p>
-              <strong>Last Updated:</strong> {new Date(featuredRecipe.lastUpdated).toLocaleDateString()}
+              <strong>Last Updated:</strong>{" "}
+              {new Date(featuredRecipe.lastUpdated).toLocaleDateString()}
             </p>
           </div>
         ) : (
