@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import "../index.css";
 
 const ContactPage = () => {
   const [formData, setFormData] = useState({
-    subject: '',
-    email: '',
-    message: '',
+    subject: "",
+    email: "",
+    message: "",
   });
-  const [status, setStatus] = useState('');
+  const [status, setStatus] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -15,36 +16,35 @@ const ContactPage = () => {
       [name]: value,
     }));
   };
-
-  // Handle form submission
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setStatus('Sending...');
+    setStatus("Sending...");
 
     try {
-      const response = await fetch('http://localhost:3000/messages', {
-        method: 'POST',
+      const response = await fetch("http://localhost:3000/messages", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       });
 
       if (response.ok) {
-        setStatus('Message sent successfully!');
-        setFormData({ subject: '', email: '', message: '' });
+        setStatus("Message sent successfully!");
+        setFormData({ subject: "", email: "", message: "" });
       } else {
-        setStatus('Failed to send the message.');
+        setStatus("Failed to send the message.");
       }
     } catch (error) {
-      setStatus('Error: Unable to connect to the server.');
+      setStatus("Error: Unable to connect to the server.");
     }
   };
 
   return (
-    <div>
+    <div className="contact-container">
       <h1>Contact Me</h1>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="contact-form">
         <label>
           Subject:
           <input
@@ -74,11 +74,9 @@ const ContactPage = () => {
             required
           />
         </label>
-        <button type="submit">
-          Send Message
-        </button>
+        <button type="submit">Send Message</button>
       </form>
-      {status && <p>{status}</p>}
+      {status && <p className="status-message">{status}</p>}
     </div>
   );
 };
