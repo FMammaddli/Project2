@@ -16,7 +16,8 @@ const RecipePage = () => {
   const [difficultyFilter, setDifficultyFilter] = useState("");
   const [tagFilter, setTagFilter] = useState("");
   const [sortOption, setSortOption] = useState("");
-  const [titleSearch, setTitleSearch] = useState("");
+  // Renamed to a more general term, but you can keep it as `titleSearch` if desired
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     const fetchRecipes = async () => {
@@ -70,6 +71,7 @@ const RecipePage = () => {
         .split(",")
         .map((item) => item.trim())
         .filter((item) => item);
+
       const { data, error } = await supabase
         .from("Recipes")
         .insert([
@@ -84,6 +86,7 @@ const RecipePage = () => {
           },
         ])
         .select();
+
       if (error) {
         console.error(error);
         return;
@@ -105,16 +108,35 @@ const RecipePage = () => {
 
   const filteredAndSortedRecipes = useMemo(() => {
     let output = [...recipes];
-    if (titleSearch) {
-      output = output.filter((recipe) =>
-        recipe.title.toLowerCase().includes(titleSearch.toLowerCase())
-      );
+
+    // Updated search to check title, description, and ingredients
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      output = output.filter((recipe) => {
+        const titleMatch =
+          recipe.title && recipe.title.toLowerCase().includes(query);
+
+        const descriptionMatch =
+          recipe.description &&
+          recipe.description.toLowerCase().includes(query);
+
+        const ingredientsMatch =
+          Array.isArray(recipe.ingredients) &&
+          recipe.ingredients.some((ingredient) =>
+            ingredient.toLowerCase().includes(query)
+          );
+
+        // Return true if any of the three fields match
+        return titleMatch || descriptionMatch || ingredientsMatch;
+      });
     }
+
     if (difficultyFilter) {
       output = output.filter(
         (r) => r.difficulty.toLowerCase() === difficultyFilter.toLowerCase()
       );
     }
+
     if (tagFilter) {
       output = output.filter((r) => {
         if (!r.tags || !Array.isArray(r.tags)) return false;
@@ -123,6 +145,7 @@ const RecipePage = () => {
         );
       });
     }
+
     switch (sortOption) {
       case "title-asc":
         output.sort((a, b) => a.title.localeCompare(b.title));
@@ -149,8 +172,9 @@ const RecipePage = () => {
       default:
         break;
     }
+
     return output;
-  }, [recipes, difficultyFilter, tagFilter, sortOption, titleSearch]);
+  }, [recipes, searchQuery, difficultyFilter, tagFilter, sortOption]);
 
   return (
     <div className="recipe-page">
@@ -159,11 +183,12 @@ const RecipePage = () => {
         <button onClick={() => setIsCreating(!isCreating)}>
           {isCreating ? "Cancel" : "Create Recipe"}
         </button>
+        {/* Updated placeholder to indicate searching in title, description, and ingredients */}
         <input
           type="text"
-          placeholder="Search by title"
-          value={titleSearch}
-          onChange={(e) => setTitleSearch(e.target.value)}
+          placeholder="Search recipes (title, description, or ingredients)"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
         />
         <select
           value={difficultyFilter}
