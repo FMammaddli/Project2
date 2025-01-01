@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from "react";
 import "../index.css";
 
-export default function RecipeCard({ recipe, onUpdate, onDelete }) {
+export default function RecipeCard({
+  recipe,
+  isSelected,
+  onSelectChange,
+  onUpdate,
+  onDelete,
+}) {
   const [editMode, setEditMode] = useState(false);
   const [title, setTitle] = useState(recipe?.title || "");
   const [description, setDescription] = useState(recipe?.description || "");
@@ -35,16 +41,12 @@ export default function RecipeCard({ recipe, onUpdate, onDelete }) {
       difficulty,
       lastUpdated: new Date().toISOString(),
     };
-    if (typeof onUpdate === "function") {
-      onUpdate(updatedRecipe);
-    }
+    if (typeof onUpdate === "function") onUpdate(updatedRecipe);
     setEditMode(false);
   };
 
   const handleDelete = () => {
-    if (typeof onDelete === "function") {
-      onDelete(recipe.id);
-    }
+    if (typeof onDelete === "function") onDelete(recipe.id);
   };
 
   const handleCancel = () => {
@@ -59,11 +61,19 @@ export default function RecipeCard({ recipe, onUpdate, onDelete }) {
   };
 
   const tagsString = Array.isArray(tags) ? tags.join(", ") : tags;
-  const ingredientsString = Array.isArray(ingredients) ? ingredients.join(", ") : ingredients;
+  const ingredientsString = Array.isArray(ingredients)
+    ? ingredients.join(", ")
+    : ingredients;
   const stepsString = Array.isArray(steps) ? steps.join(", ") : steps;
 
   return (
     <div className="recipe-card my-4">
+      <input
+        type="checkbox"
+        className="recipe-checkbox"
+        checked={isSelected}
+        onChange={() => onSelectChange(recipe.id)}
+      />
       {!editMode && (
         <div className="recipe-card-view">
           <p className="recipe-label">
@@ -79,20 +89,31 @@ export default function RecipeCard({ recipe, onUpdate, onDelete }) {
             </p>
           )}
           {Array.isArray(recipe.ingredients) && recipe.ingredients.length > 0 && (
-            <p className="recipe-ingredients">
-              <strong>Ingredients:</strong> {recipe.ingredients.join(", ")}
-            </p>
+            <div className="recipe-ingredients">
+              <strong>Ingredients:</strong>
+              <ul className="ingredient-list">
+                {recipe.ingredients.map((ing, i) => (
+                  <li key={i}>{ing}</li>
+                ))}
+              </ul>
+            </div>
           )}
           {Array.isArray(recipe.steps) && recipe.steps.length > 0 && (
-            <p className="recipe-steps">
-              <strong>Steps:</strong> {recipe.steps.join(", ")}
-            </p>
+            <div className="recipe-steps">
+              <strong>Steps:</strong>
+              <ol className="step-list">
+                {recipe.steps.map((st, i) => (
+                  <li key={i}>{st}</li>
+                ))}
+              </ol>
+            </div>
           )}
           <p className="recipe-difficulty">
             <strong>Difficulty:</strong> {recipe.difficulty}
           </p>
           <p>
-            <strong>Last Updated:</strong> {new Date(recipe.lastUpdated).toLocaleDateString()}
+            <strong>Last Updated:</strong>{" "}
+            {new Date(recipe.lastUpdated).toLocaleDateString()}
           </p>
           <div className="button-group">
             <button className="btn btn-edit" onClick={() => setEditMode(true)}>
@@ -132,7 +153,9 @@ export default function RecipeCard({ recipe, onUpdate, onDelete }) {
               className="edit-input"
               type="text"
               value={tagsString}
-              onChange={(e) => setTags(e.target.value.split(",").map((t) => t.trim()))}
+              onChange={(e) =>
+                setTags(e.target.value.split(",").map((t) => t.trim()))
+              }
             />
           </div>
           <div className="edit-field">

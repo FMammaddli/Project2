@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useMemo } from "react";
 import RecipeCard from "./RecipeCard";
 import { supabase } from "./createClient";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
-const RecipePage = () => {
+export default function RecipePage() {
   const [recipes, setRecipes] = useState([]);
   const [isCreating, setIsCreating] = useState(false);
   const [newRecipe, setNewRecipe] = useState({
@@ -17,6 +18,7 @@ const RecipePage = () => {
   const [tagFilter, setTagFilter] = useState("");
   const [sortOption, setSortOption] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedRecipeIds, setSelectedRecipeIds] = useState([]);
 
   useEffect(() => {
     const fetchRecipes = async () => {
@@ -24,7 +26,7 @@ const RecipePage = () => {
         const { data, error } = await supabase
           .from("Recipes")
           .select("*")
-          .order("lastUpdated", { ascending: false });
+          .order("order", { ascending: true }); // Fetch sorted by 'order'
         if (error) {
           console.error(error);
           return;
@@ -36,6 +38,45 @@ const RecipePage = () => {
     };
     fetchRecipes();
   }, []);
+
+  const handleDragEnd = async (result) => {
+    if (!result.destination) return; 
+  
+    const reorderedRecipes = Array.from(recipes);
+    const [movedItem] = reorderedRecipes.splice(result.source.index, 1);
+    reorderedRecipes.splice(result.destination.index, 0, movedItem);
+  
+    const updatedRecipes = reorderedRecipes.map((recipe, index) => ({
+      ...recipe,
+      order: index + 1,
+    }));
+  
+    setRecipes(updatedRecipes);
+  
+    const updates = updatedRecipes.map((recipe) => ({
+      id: recipe.id,
+      order: recipe.order,
+    }));
+  
+    console.log("Updating order in database:", updates);
+  
+    try {
+      for (const update of updates) {
+        const { error } = await supabase
+          .from("Recipes")
+          .update({ order: update.order })
+          .eq("id", update.id);
+  
+        if (error) {
+          console.error("Failed to update recipe order in the database:", error);
+        }
+      }
+  
+      console.log("Order updated successfully in the database");
+    } catch (err) {
+      console.error("Error during order update:", err);
+    }
+  };
 
   const handleUpdateRecipe = (updatedRecipe) => {
     setRecipes((prev) =>
@@ -51,6 +92,7 @@ const RecipePage = () => {
         return;
       }
       setRecipes((prev) => prev.filter((r) => r.id !== id));
+      setSelectedRecipeIds((prev) => prev.filter((item) => item !== id));
     } catch (err) {
       console.error(err);
     }
@@ -82,6 +124,7 @@ const RecipePage = () => {
             tags: tagsArray,
             difficulty: newRecipe.difficulty,
             lastUpdated: new Date().toISOString(),
+            order: recipes.length + 1,
           },
         ])
         .select();
@@ -90,7 +133,7 @@ const RecipePage = () => {
         console.error(error);
         return;
       }
-      if (data && data.length > 0) setRecipes((prev) => [data[0], ...prev]);
+      if (data && data.length > 0) setRecipes((prev) => [...prev, data[0]]);
       setIsCreating(false);
       setNewRecipe({
         title: "",
@@ -105,6 +148,30 @@ const RecipePage = () => {
     }
   };
 
+  const handleSelectChange = (id) => {
+    setSelectedRecipeIds((prev) => {
+      if (prev.includes(id)) return prev.filter((item) => item !== id);
+      return [...prev, id];
+    });
+  };
+
+  const handleShareSelected = () => {
+    const selected = recipes.filter((r) => selectedRecipeIds.includes(r.id));
+    const details = selected
+      .map((r) => {
+        const ingredientsList = r.ingredients.join(", ");
+        const stepsList = r.steps.join(", ");
+        const tagsList = r.tags.join(", ");
+        return `Title: ${r.title}\nDescription: ${r.description}\nIngredients: ${ingredientsList}\nSteps: ${stepsList}\nTags: ${tagsList}\nDifficulty: ${r.difficulty}\nLast Updated: ${new Date(r.lastUpdated).toLocaleString()}`;
+      })
+      .join("\n\n");
+
+    const mailtoURL = `mailto:?subject=Check out these recipes&body=Here are the recipes:\n\n${encodeURIComponent(
+      details
+    )}`;
+    window.open(mailtoURL, "_blank");
+  };
+
   const filteredAndSortedRecipes = useMemo(() => {
     let output = [...recipes];
 
@@ -113,17 +180,14 @@ const RecipePage = () => {
       output = output.filter((recipe) => {
         const titleMatch =
           recipe.title && recipe.title.toLowerCase().includes(query);
-
         const descriptionMatch =
           recipe.description &&
           recipe.description.toLowerCase().includes(query);
-
         const ingredientsMatch =
           Array.isArray(recipe.ingredients) &&
           recipe.ingredients.some((ingredient) =>
             ingredient.toLowerCase().includes(query)
           );
-
         return titleMatch || descriptionMatch || ingredientsMatch;
       });
     }
@@ -155,16 +219,6 @@ const RecipePage = () => {
         break;
       case "diff-desc":
         output.sort((a, b) => b.difficulty.localeCompare(a.difficulty));
-        break;
-      case "updated-asc":
-        output.sort(
-          (a, b) => new Date(a.lastUpdated) - new Date(b.lastUpdated)
-        );
-        break;
-      case "updated-desc":
-        output.sort(
-          (a, b) => new Date(b.lastUpdated) - new Date(a.lastUpdated)
-        );
         break;
       default:
         break;
@@ -210,9 +264,10 @@ const RecipePage = () => {
           <option value="title-desc">Title (Z-A)</option>
           <option value="diff-asc">Difficulty (A-Z)</option>
           <option value="diff-desc">Difficulty (Z-A)</option>
-          <option value="updated-asc">Last Updated (Oldest)</option>
-          <option value="updated-desc">Last Updated (Newest)</option>
         </select>
+        {selectedRecipeIds.length > 0 && (
+          <button onClick={handleShareSelected}>Share</button>
+        )}
       </div>
       {isCreating && (
         <div className="create-recipe-form">
@@ -281,18 +336,42 @@ const RecipePage = () => {
           <button onClick={handleCreate}>Create</button>
         </div>
       )}
-      <section className="recipe-list">
-        {filteredAndSortedRecipes.map((recipe) => (
-          <RecipeCard
-            key={recipe.id}
-            recipe={recipe}
-            onUpdate={handleUpdateRecipe}
-            onDelete={handleDeleteRecipe}
-          />
-        ))}
-      </section>
+      <DragDropContext onDragEnd={handleDragEnd}>
+        <Droppable droppableId="recipe-list">
+          {(provided) => (
+            <section
+              className="recipe-list"
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+            >
+              {filteredAndSortedRecipes.map((recipe, index) => (
+                <Draggable
+                  key={recipe.id}
+                  draggableId={recipe.id.toString()}
+                  index={index}
+                >
+                  {(provided) => (
+                    <div
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                    >
+                      <RecipeCard
+                        recipe={recipe}
+                        isSelected={selectedRecipeIds.includes(recipe.id)}
+                        onSelectChange={handleSelectChange}
+                        onUpdate={handleUpdateRecipe}
+                        onDelete={handleDeleteRecipe}
+                      />
+                    </div>
+                  )}
+                </Draggable>
+              ))}
+              {provided.placeholder}
+            </section>
+          )}
+        </Droppable>
+      </DragDropContext>
     </div>
   );
-};
-
-export default RecipePage;
+}
