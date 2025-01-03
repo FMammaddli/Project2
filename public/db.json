@@ -1,18 +1,10 @@
 {
-  "recipes": [
+  "messages": [
     {
-      "id": 1,
-      "title": "Chicken Fille",
-      "description": "Lorem.",
-      "difficulty": "Easy",
-      "lastUpdated": "2024"
-    },
-    {
-      "id": 2,
-      "title": "Loremn",
-      "description": "Lorem.",
-      "difficulty": "Hard",
-      "lastUpdated": "2024"
+      "id": "5bd3",
+      "subject": "Failed to retrieve organizations",
+      "email": "faridapril1982@gmail.com",
+      "message": "awdawdawdawd"
     }
   ]
 }
