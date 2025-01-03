@@ -5,6 +5,7 @@ body {
   color: #374151;
 }
 
+/* App Container */
 .App {
   text-align: center;
   padding: 2rem;
@@ -20,6 +21,7 @@ body {
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
+/* Header Styles */
 header {
   margin-bottom: 2rem;
   text-align: center;
@@ -60,25 +62,7 @@ header p {
   transform: translateY(-2px);
 }
 
-button {
-  margin-top: 1rem;
-  padding: 0.8rem 1.5rem;
-  font-size: 1rem;
-  font-weight: bold;
-  background-color: #3b82f6;
-  color: #ffffff;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-button:hover {
-  background-color: #2563eb;
-  transform: translateY(-2px);
-}
-
-/* Featured Recipe Styles */
+/* Featured Recipe Section */
 .featured-recipe {
   background-color: #ffffff;
   padding: 1.5rem;
@@ -97,7 +81,7 @@ button:hover {
   margin-bottom: 1rem;
 }
 
-/* Recipe List and Card Styles */
+/* Recipe List Section */
 .recipe-list {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -105,6 +89,7 @@ button:hover {
   margin-top: 2rem;
 }
 
+/* Recipe Card Styles */
 .recipe-card {
   background-color: #ffffff;
   border-radius: 8px;
@@ -115,7 +100,6 @@ button:hover {
 
 .recipe-card:hover {
   transform: translateY(-5px);
-  background-color: #f9fafb;
 }
 
 .recipe-card h3 {
@@ -134,22 +118,74 @@ button:hover {
   color: #1f2937;
 }
 
-/* Drag-and-Drop Styles */
-.drag-overlay {
-  background-color: rgba(0, 0, 0, 0.05);
-  padding: 0.5rem;
-}
-
-.recipe-card.dragging {
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-  background-color: #f1f5f9;
-}
-
-.drag-placeholder {
-  border: 2px dashed #60a5fa;
+/* Buttons */
+button {
+  margin-top: 1rem;
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  font-weight: bold;
+  background-color: #3b82f6;
+  color: #ffffff;
   border-radius: 8px;
-  background-color: #e5f3ff;
-  height: 100px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+  background-color: #2563eb;
+  transform: translateY(-2px);
+}
+
+/* Projects Section */
+.projects {
+  margin-top: 2rem;
+  text-align: left;
+}
+
+.projects h2 {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.projects ul {
+  list-style: none;
+  padding: 0;
+}
+
+.projects li {
+  margin: 0.5rem 0;
+}
+
+.projects a {
+  color: #3b82f6;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.projects a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .featured-recipe,
+  .recipe-card {
+    width: 100%;
+    padding: 1rem;
+  }
+
+  header h1 {
+    font-size: 2rem;
+  }
+
+  header p {
+    font-size: 1rem;
+  }
+
+  button {
+    width: 100%;
+  }
 }
 
 /* Filter and Sort Controls */
@@ -265,6 +301,45 @@ button:hover {
   background: #dc2626;
 }
 
+/* Edit Form Styles */
+.edit-form {
+  max-width: 600px;
+}
+
+.edit-field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+.edit-field label {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.edit-input,
+.edit-textarea,
+.edit-select {
+  border: 1px solid #ccc;
+  border-radius: 0.25rem;
+  padding: 0.5rem;
+  font: inherit;
+  outline: none;
+}
+
+.edit-textarea {
+  resize: vertical;
+}
+
+/* Hover Buttons in Recipe Card */
+.recipe-card-view .button-group {
+  display: none;
+}
+
+.recipe-card-view:hover .button-group {
+  display: flex;
+}
+
 /* Navbar Styles */
 .navbar {
   background-color: #2f855a;
@@ -360,22 +435,9 @@ button:hover {
   transform: translateY(-2px);
 }
 
+/* Status Message */
 .status-message {
   text-align: center;
   margin-top: 1rem;
   font-weight: 500;
-}
-
-/* Media Queries */
-@media (max-width: 768px) {
-  .featured-recipe,
-  .recipe-card {
-    width: 100%;
-    padding: 1rem;
-  }
-
-  .filter-sort-controls {
-    flex-direction: column;
-    align-items: flex-start;
-  }
 }
