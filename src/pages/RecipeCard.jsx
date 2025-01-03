@@ -76,9 +76,6 @@ export default function RecipeCard({
       />
       {!editMode && (
         <div className="recipe-card-view">
-          <p className="recipe-label">
-            <strong>ID:</strong> {recipe.id}
-          </p>
           <h3 className="recipe-title">{recipe.title}</h3>
           <p className="recipe-description">
             <strong>Description:</strong> {recipe.description}
@@ -127,9 +124,6 @@ export default function RecipeCard({
       )}
       {editMode && (
         <div className="edit-form">
-          <p className="recipe-label">
-            <strong>ID:</strong> {recipe.id}
-          </p>
           <div className="edit-field">
             <label>Title:</label>
             <input
@@ -175,7 +169,9 @@ export default function RecipeCard({
               className="edit-input"
               type="text"
               value={stepsString}
-              onChange={(e) => setSteps(e.target.value.split(",").map((st) => st.trim()))}
+              onChange={(e) =>
+                setSteps(e.target.value.split(",").map((st) => st.trim()))
+              }
             />
           </div>
           <div className="edit-field">
