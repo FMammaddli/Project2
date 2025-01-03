@@ -14,64 +14,83 @@ export default function RecipePage() {
     tags: "",
     difficulty: "Easy",
   });
+
+  
   const [difficultyFilter, setDifficultyFilter] = useState("");
   const [tagFilter, setTagFilter] = useState("");
-  const [sortOption, setSortOption] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
+
+  
+  const [sortOption, setSortOption] = useState("");
+
+  
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(5);
+  const [totalPages, setTotalPages] = useState(0);
+
+  
   const [selectedRecipeIds, setSelectedRecipeIds] = useState([]);
 
   useEffect(() => {
     const fetchRecipes = async () => {
       try {
-        const { data, error } = await supabase
+        const from = (currentPage - 1) * pageSize;
+        const to = from + pageSize - 1;
+
+        
+        const { data, error, count } = await supabase
           .from("Recipes")
-          .select("*")
-          .order("order", { ascending: true }); // Fetch sorted by 'order'
+          .select("*", { count: "exact" })
+          .order("order", { ascending: true })
+          .range(from, to);
+
         if (error) {
           console.error(error);
           return;
         }
-        setRecipes(data);
+
+        
+        setRecipes(data || []);
+        
+        setTotalPages(Math.ceil(count / pageSize));
       } catch (err) {
         console.error(err);
       }
     };
     fetchRecipes();
-  }, []);
+  }, [currentPage, pageSize]);
 
-  const handleDragEnd = async (result) => {
-    if (!result.destination) return; 
   
+  
+  
+  const handleDragEnd = async (result) => {
+    if (!result.destination) return;
+
     const reorderedRecipes = Array.from(recipes);
     const [movedItem] = reorderedRecipes.splice(result.source.index, 1);
     reorderedRecipes.splice(result.destination.index, 0, movedItem);
-  
+
+    
+    
+    
     const updatedRecipes = reorderedRecipes.map((recipe, index) => ({
       ...recipe,
-      order: index + 1,
+      order: (currentPage - 1) * pageSize + (index + 1),
     }));
-  
+
     setRecipes(updatedRecipes);
-  
-    const updates = updatedRecipes.map((recipe) => ({
-      id: recipe.id,
-      order: recipe.order,
-    }));
-  
-    console.log("Updating order in database:", updates);
-  
+
     try {
-      for (const update of updates) {
+      for (const update of updatedRecipes) {
         const { error } = await supabase
           .from("Recipes")
           .update({ order: update.order })
           .eq("id", update.id);
-  
+
         if (error) {
           console.error("Failed to update recipe order in the database:", error);
         }
       }
-  
       console.log("Order updated successfully in the database");
     } catch (err) {
       console.error("Error during order update:", err);
@@ -103,15 +122,23 @@ export default function RecipePage() {
       const ingredientsArray = newRecipe.ingredients
         .split(",")
         .map((item) => item.trim())
-        .filter((item) => item);
+        .filter(Boolean);
+
       const stepsArray = newRecipe.steps
         .split(",")
         .map((item) => item.trim())
-        .filter((item) => item);
+        .filter(Boolean);
+
       const tagsArray = newRecipe.tags
         .split(",")
         .map((item) => item.trim())
-        .filter((item) => item);
+        .filter(Boolean);
+
+      
+      const { count } = await supabase
+        .from("Recipes")
+        .select("id", { count: "exact", head: true });
+      const nextOrder = (count || 0) + 1;
 
       const { data, error } = await supabase
         .from("Recipes")
@@ -124,7 +151,7 @@ export default function RecipePage() {
             tags: tagsArray,
             difficulty: newRecipe.difficulty,
             lastUpdated: new Date().toISOString(),
-            order: recipes.length + 1,
+            order: nextOrder,
           },
         ])
         .select();
@@ -133,7 +160,10 @@ export default function RecipePage() {
         console.error(error);
         return;
       }
-      if (data && data.length > 0) setRecipes((prev) => [...prev, data[0]]);
+
+      
+      setCurrentPage(1);
+
       setIsCreating(false);
       setNewRecipe({
         title: "",
@@ -162,11 +192,17 @@ export default function RecipePage() {
         const ingredientsList = r.ingredients.join(", ");
         const stepsList = r.steps.join(", ");
         const tagsList = r.tags.join(", ");
-        return `Title: ${r.title}\nDescription: ${r.description}\nIngredients: ${ingredientsList}\nSteps: ${stepsList}\nTags: ${tagsList}\nDifficulty: ${r.difficulty}\nLast Updated: ${new Date(r.lastUpdated).toLocaleString()}`;
+        return `Title: ${r.title}
+Description: ${r.description}
+Ingredients: ${ingredientsList}
+Steps: ${stepsList}
+Tags: ${tagsList}
+Difficulty: ${r.difficulty}
+Last Updated: ${new Date(r.lastUpdated).toLocaleString()}`;
       })
       .join("\n\n");
 
-    const mailtoURL = `mailto:?subject=Check out these recipes&body=Here are the recipes:\n\n${encodeURIComponent(
+    const mailtoURL = `mailto:?subject=Check out these recipes&body=${encodeURIComponent(
       details
     )}`;
     window.open(mailtoURL, "_blank");
@@ -227,19 +263,52 @@ export default function RecipePage() {
     return output;
   }, [recipes, searchQuery, difficultyFilter, tagFilter, sortOption]);
 
+  
+  
+  
+  const handleNextPage = () => {
+    
+    if (currentPage >= totalPages || totalPages === 0) return;
+
+    
+    setSearchQuery("");
+    setDifficultyFilter("");
+    setTagFilter("");
+
+    
+    setCurrentPage((prev) => prev + 1);
+  };
+
+  const handlePrevPage = () => {
+    
+    if (currentPage <= 1) return;
+
+    
+    setSearchQuery("");
+    setDifficultyFilter("");
+    setTagFilter("");
+
+    
+    setCurrentPage((prev) => prev - 1);
+  };
+
   return (
     <div className="recipe-page">
       <h2>Recipe List</h2>
+
+      {/* Filter, Search, and Sort Controls */}
       <div className="filter-sort-controls">
         <button onClick={() => setIsCreating(!isCreating)}>
           {isCreating ? "Cancel" : "Create Recipe"}
         </button>
+
         <input
           type="text"
           placeholder="Search"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
+
         <select
           value={difficultyFilter}
           onChange={(e) => setDifficultyFilter(e.target.value)}
@@ -249,12 +318,14 @@ export default function RecipePage() {
           <option value="Medium">Medium</option>
           <option value="Hard">Hard</option>
         </select>
+
         <input
           type="text"
           placeholder="Filter by tag"
           value={tagFilter}
           onChange={(e) => setTagFilter(e.target.value)}
         />
+
         <select
           value={sortOption}
           onChange={(e) => setSortOption(e.target.value)}
@@ -265,6 +336,7 @@ export default function RecipePage() {
           <option value="diff-asc">Difficulty (A-Z)</option>
           <option value="diff-desc">Difficulty (Z-A)</option>
         </select>
+
         {selectedRecipeIds.length > 0 && (
           <button onClick={handleShareSelected}>Share</button>
         )}
@@ -372,6 +444,34 @@ export default function RecipePage() {
           )}
         </Droppable>
       </DragDropContext>
+      <div className="pagination-controls" style={{ marginTop: "1rem" }}>
+        <button onClick={handlePrevPage} disabled={currentPage === 1}>
+          Previous
+        </button>
+
+        <span style={{ margin: "0 1rem" }}>
+          Page {currentPage} of {totalPages}
+        </span>
+
+        <button
+          onClick={handleNextPage}
+          disabled={currentPage === totalPages || totalPages === 0}
+        >
+          Next
+        </button>
+        <select
+          value={pageSize}
+          onChange={(e) => {
+            setPageSize(Number(e.target.value));
+            setCurrentPage(1);
+          }}
+          style={{ marginLeft: "1rem" }}
+        >
+          <option value={5}>5 / page</option>
+          <option value={10}>10 / page</option>
+          <option value={20}>20 / page</option>
+        </select>
+      </div>
     </div>
   );
 }
