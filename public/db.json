@@ -2,7 +2,7 @@
   "Recipes": [
     {
       "id": "1",
-      "title": "Spaghetti Carbonarabbb",
+      "title": "Spaghetti Carbonara",
       "description": "A classic Italian pasta dish made with eggs, cheese, pancetta, and pepper.",
       "ingredients": [
         "200g spaghetti",
@@ -29,7 +29,7 @@
         "Dinner"
       ],
       "difficulty": "Medium",
-      "lastUpdated": "2025-01-04T16:55:06.705Z",
+      "lastUpdated": "2025-01-04T21:05:35.432Z",
       "order": 1
     },
     {
@@ -97,7 +97,7 @@
         "Dinner"
       ],
       "difficulty": "Hard",
-      "lastUpdated": "2025-01-01T12:00:00Z",
+      "lastUpdated": "2025-01-04T21:06:01.713Z",
       "order": 1
     },
     {
