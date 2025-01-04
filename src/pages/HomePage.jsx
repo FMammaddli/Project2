@@ -9,10 +9,6 @@ const HomePage = () => {
     fetchFeaturedRecipe();
   }, []);
 
-  /**
-   * Fetch the newest recipe from JSON Server by sorting
-   * on `lastUpdated` in descending order.
-   */
   const fetchFeaturedRecipe = async () => {
     try {
       const response = await fetch(
@@ -30,9 +26,6 @@ const HomePage = () => {
     }
   };
 
-  /**
-   * Example projects array. Adjust as needed.
-   */
   const projects = [
     {
       title: "Project 1: AutoForm Filler",
@@ -111,17 +104,25 @@ const HomePage = () => {
               )}
             {Array.isArray(featuredRecipe.ingredients) &&
               featuredRecipe.ingredients.length > 0 && (
-                <p>
-                  <strong>Ingredients:</strong>{" "}
-                  {featuredRecipe.ingredients.join(", ")}
-                </p>
+                <div>
+                  <strong>Ingredients:</strong>
+                  <ul>
+                    {featuredRecipe.ingredients.map((ingredient, idx) => (
+                      <li key={idx}>{ingredient}</li>
+                    ))}
+                  </ul>
+                </div>
               )}
             {Array.isArray(featuredRecipe.steps) &&
               featuredRecipe.steps.length > 0 && (
-                <p>
-                  <strong>Steps:</strong>{" "}
-                  {featuredRecipe.steps.join(", ")}
-                </p>
+                <div>
+                  <strong>Steps:</strong>
+                  <ol>
+                    {featuredRecipe.steps.map((step, idx) => (
+                      <li key={idx}>{step}</li>
+                    ))}
+                  </ol>
+                </div>
               )}
             <p>
               <strong>Difficulty:</strong> {featuredRecipe.difficulty}
