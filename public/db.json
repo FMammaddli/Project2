@@ -1,22 +1,306 @@
 {
+  "Recipes": [
+    {
+      "id": "1",
+      "title": "Spaghetti Carbonarabbb",
+      "description": "A classic Italian pasta dish made with eggs, cheese, pancetta, and pepper.",
+      "ingredients": [
+        "200g spaghetti",
+        "100g pancetta",
+        "2 large eggs",
+        "50g Pecorino cheese",
+        "50g Parmesan",
+        "2 cloves garlic",
+        "Salt",
+        "Black pepper"
+      ],
+      "steps": [
+        "Boil the spaghetti in salted water according to package instructions.",
+        "Fry the pancetta with garlic until crispy.",
+        "Beat the eggs in a bowl, then mix in the grated Pecorino and Parmesan cheeses.",
+        "Drain the spaghetti and return to the pot.",
+        "Quickly mix in the pancetta and its fat.",
+        "Remove from heat and add the egg and cheese mixture, stirring vigorously.",
+        "Season with black pepper and serve immediately."
+      ],
+      "tags": [
+        "Italian",
+        "Pasta",
+        "Dinner"
+      ],
+      "difficulty": "Medium",
+      "lastUpdated": "2025-01-04T16:55:06.705Z",
+      "order": 1
+    },
+    {
+      "id": "2",
+      "title": "Classic Pancakes",
+      "description": "Fluffy and light pancakes perfect for a hearty breakfast.",
+      "ingredients": [
+        "1 1/2 cups all-purpose flour",
+        "3 1/2 teaspoons baking powder",
+        "1 teaspoon salt",
+        "1 tablespoon white sugar",
+        "1 1/4 cups milk",
+        "1 egg",
+        "3 tablespoons butter, melted"
+      ],
+      "steps": [
+        "In a large bowl, sift together the flour, baking powder, salt, and sugar.",
+        "Make a well in the center and pour in the milk, egg, and melted butter; mix until smooth.",
+        "Heat a lightly oiled griddle or frying pan over medium-high heat.",
+        "Pour or scoop the batter onto the griddle, using approximately 1/4 cup for each pancake.",
+        "Brown on both sides and serve hot with your favorite toppings."
+      ],
+      "tags": [
+        "Breakfast",
+        "Sweet",
+        "Easy"
+      ],
+      "difficulty": "Easy",
+      "lastUpdated": "2024-11-15T08:00:00Z",
+      "order": 2
+    },
+    {
+      "id": "3",
+      "title": "Beef Stroganoff",
+      "description": "A Russian dish of sautéed pieces of beef served in a sauce with smetana (sour cream).",
+      "ingredients": [
+        "500g beef sirloin, thinly sliced",
+        "1 onion, finely chopped",
+        "2 cloves garlic, minced",
+        "250g mushrooms, sliced",
+        "2 tablespoons all-purpose flour",
+        "1 cup beef broth",
+        "1 tablespoon Dijon mustard",
+        "1 cup sour cream",
+        "2 tablespoons vegetable oil",
+        "Salt and pepper to taste",
+        "Fresh parsley, chopped (for garnish)"
+      ],
+      "steps": [
+        "Heat oil in a large skillet over medium-high heat.",
+        "Add the beef slices and cook until browned. Remove and set aside.",
+        "In the same skillet, add onions and garlic, sauté until translucent.",
+        "Add mushrooms and cook until they release their moisture and become tender.",
+        "Sprinkle flour over the vegetables and stir to combine.",
+        "Gradually add beef broth, stirring continuously to avoid lumps.",
+        "Stir in Dijon mustard and return the beef to the skillet.",
+        "Reduce heat and simmer for 10 minutes.",
+        "Remove from heat and stir in sour cream. Do not boil.",
+        "Season with salt and pepper to taste.",
+        "Garnish with fresh parsley and serve over egg noodles or rice."
+      ],
+      "tags": [
+        "Russian",
+        "Beef",
+        "Dinner"
+      ],
+      "difficulty": "Hard",
+      "lastUpdated": "2025-01-01T12:00:00Z",
+      "order": 1
+    },
+    {
+      "id": "4",
+      "title": "Vegetable Stir-Fry",
+      "description": "A quick and healthy stir-fry loaded with fresh vegetables and a savory sauce.",
+      "ingredients": [
+        "2 tablespoons vegetable oil",
+        "1 bell pepper, sliced",
+        "1 carrot, julienned",
+        "1 zucchini, sliced",
+        "1 cup broccoli florets",
+        "2 cloves garlic, minced",
+        "1 tablespoon ginger, minced",
+        "3 tablespoons soy sauce",
+        "2 tablespoons hoisin sauce",
+        "1 tablespoon cornstarch",
+        "1/2 cup vegetable broth",
+        "Sesame seeds (for garnish)"
+      ],
+      "steps": [
+        "In a small bowl, mix soy sauce, hoisin sauce, cornstarch, and vegetable broth. Set aside.",
+        "Heat vegetable oil in a large wok or skillet over high heat.",
+        "Add garlic and ginger, stir-fry for about 30 seconds until fragrant.",
+        "Add all the vegetables and stir-fry for 5-7 minutes until tender-crisp.",
+        "Pour in the sauce mixture and stir well to coat the vegetables.",
+        "Cook for another 2-3 minutes until the sauce thickens.",
+        "Remove from heat and garnish with sesame seeds.",
+        "Serve hot over steamed rice or noodles."
+      ],
+      "tags": [
+        "Vegetarian",
+        "Healthy",
+        "Quick"
+      ],
+      "difficulty": "Medium",
+      "lastUpdated": "2024-10-10T09:15:00Z",
+      "order": 4
+    },
+    {
+      "id": "5",
+      "title": "Chocolate Chip Cookies",
+      "description": "Classic chewy chocolate chip cookies with a perfect balance of sweetness.",
+      "ingredients": [
+        "1 cup unsalted butter, softened",
+        "1 cup white sugar",
+        "1 cup packed brown sugar",
+        "2 eggs",
+        "2 teaspoons vanilla extract",
+        "3 cups all-purpose flour",
+        "1 teaspoon baking soda",
+        "2 teaspoons hot water",
+        "1/2 teaspoon salt",
+        "2 cups semisweet chocolate chips",
+        "1 cup chopped walnuts (optional)"
+      ],
+      "steps": [
+        "Preheat oven to 350°F (175°C).",
+        "Cream together the butter, white sugar, and brown sugar until smooth.",
+        "Beat in the eggs one at a time, then stir in the vanilla.",
+        "Dissolve baking soda in hot water and add to the batter along with salt.",
+        "Stir in flour, chocolate chips, and nuts.",
+        "Drop by large spoonfuls onto ungreased pans.",
+        "Bake for about 10 minutes in the preheated oven, or until edges are nicely browned.",
+        "Allow cookies to cool on baking sheet for a few minutes before transferring to wire racks to cool completely."
+      ],
+      "tags": [
+        "Dessert",
+        "Sweet",
+        "Easy"
+      ],
+      "difficulty": "Easy",
+      "lastUpdated": "2024-09-25T14:45:00Z",
+      "order": 5
+    },
+    {
+      "id": "6",
+      "title": "Chicken Tikka Masala",
+      "description": "A flavorful Indian curry dish with marinated chicken pieces simmered in a spiced tomato sauce.",
+      "ingredients": [
+        "500g boneless chicken, cubed",
+        "1 cup yogurt",
+        "2 tablespoons lemon juice",
+        "2 teaspoons ground cumin",
+        "2 teaspoons ground paprika",
+        "1 teaspoon ground turmeric",
+        "1 teaspoon garam masala",
+        "2 tablespoons vegetable oil",
+        "1 onion, finely chopped",
+        "3 cloves garlic, minced",
+        "1 tablespoon ginger, minced",
+        "400g canned tomatoes",
+        "1 cup heavy cream",
+        "Salt to taste",
+        "Fresh cilantro, chopped (for garnish)"
+      ],
+      "steps": [
+        "In a bowl, combine yogurt, lemon juice, cumin, paprika, turmeric, and garam masala. Add chicken and marinate for at least 1 hour.",
+        "Heat oil in a large skillet over medium heat. Add onions and sauté until golden.",
+        "Add garlic and ginger, cook for another minute until fragrant.",
+        "Add the marinated chicken and cook until browned on all sides.",
+        "Pour in the canned tomatoes and bring to a simmer. Cover and cook for 20 minutes.",
+        "Stir in heavy cream and simmer for an additional 10 minutes.",
+        "Season with salt to taste.",
+        "Garnish with fresh cilantro and serve with rice or naan bread."
+      ],
+      "tags": [
+        "Indian",
+        "Chicken",
+        "Dinner"
+      ],
+      "difficulty": "Hard",
+      "lastUpdated": "2024-12-28T16:20:00Z",
+      "order": 6
+    },
+    {
+      "id": "7",
+      "title": "Quinoa Salad",
+      "description": "A healthy and refreshing salad with quinoa, fresh vegetables, and a tangy lemon dressing.",
+      "ingredients": [
+        "1 cup quinoa",
+        "2 cups water",
+        "1 cucumber, diced",
+        "1 bell pepper, diced",
+        "1/2 red onion, finely chopped",
+        "1 cup cherry tomatoes, halved",
+        "1/4 cup fresh parsley, chopped",
+        "1/4 cup fresh mint, chopped",
+        "For the dressing:",
+        "1/4 cup olive oil",
+        "2 tablespoons lemon juice",
+        "1 tablespoon red wine vinegar",
+        "1 teaspoon Dijon mustard",
+        "Salt and pepper to taste"
+      ],
+      "steps": [
+        "Rinse the quinoa under cold water.",
+        "In a saucepan, bring water to a boil. Add quinoa, reduce heat, cover, and simmer for 15 minutes or until water is absorbed.",
+        "Remove from heat and let it sit, covered, for 5 minutes. Fluff with a fork and let it cool.",
+        "In a large bowl, combine the cooled quinoa, cucumber, bell pepper, red onion, cherry tomatoes, parsley, and mint.",
+        "In a small bowl, whisk together olive oil, lemon juice, red wine vinegar, Dijon mustard, salt, and pepper.",
+        "Pour the dressing over the salad and toss to combine.",
+        "Adjust seasoning if necessary and refrigerate for at least 30 minutes before serving."
+      ],
+      "tags": [
+        "Salad",
+        "Healthy",
+        "Vegetarian"
+      ],
+      "difficulty": "Easy",
+      "lastUpdated": "2024-11-30T11:10:00Z",
+      "order": 7
+    },
+    {
+      "id": "8",
+      "title": "Shrimp Tacos",
+      "description": "Delicious tacos filled with seasoned shrimp, fresh slaw, and a zesty lime crema.",
+      "ingredients": [
+        "500g shrimp, peeled and deveined",
+        "2 tablespoons olive oil",
+        "1 teaspoon chili powder",
+        "1 teaspoon cumin",
+        "1/2 teaspoon paprika",
+        "Salt and pepper to taste",
+        "8 small tortillas",
+        "For the slaw:",
+        "2 cups shredded cabbage",
+        "1/2 red onion, thinly sliced",
+        "1/4 cup fresh cilantro, chopped",
+        "Juice of 1 lime",
+        "Salt to taste",
+        "For the lime crema:",
+        "1/2 cup sour cream",
+        "2 tablespoons mayonnaise",
+        "Juice of 1 lime",
+        "1 teaspoon hot sauce",
+        "Salt to taste"
+      ],
+      "steps": [
+        "In a bowl, toss shrimp with olive oil, chili powder, cumin, paprika, salt, and pepper.",
+        "Heat a skillet over medium-high heat and cook shrimp for 2-3 minutes on each side until pink and cooked through.",
+        "In another bowl, combine shredded cabbage, red onion, cilantro, lime juice, and salt. Toss well to make the slaw.",
+        "In a small bowl, mix sour cream, mayonnaise, lime juice, hot sauce, and salt to create the lime crema.",
+        "Warm the tortillas in a dry skillet or microwave.",
+        "Assemble the tacos by placing a portion of shrimp on each tortilla, topping with slaw and a drizzle of lime crema.",
+        "Serve immediately with lime wedges on the side."
+      ],
+      "tags": [
+        "Mexican",
+        "Seafood",
+        "Dinner"
+      ],
+      "difficulty": "Medium",
+      "lastUpdated": "2024-12-05T18:30:00Z",
+      "order": 8
+    }
+  ],
   "messages": [
     {
-      "id": "5bd3",
-      "subject": "Failed to retrieve organizations",
+      "id": "ad12",
+      "subject": "NEaesfaesf",
       "email": "faridapril1982@gmail.com",
-      "message": "awdawdawdawd"
-    },
-    {
-      "id": "51b2",
-      "subject": "Failed to retrieve organizations sdrgsdrg",
-      "email": "faridapril1982@gmail.com",
-      "message": "g sdrgoksdn kgsdklrg nsd;rlg nsdlkrg nlsd;kn;drslkg nsd;lkng r;dlskgn ;ldksgn dsr;lkgnr;sdlkr n"
-    },
-    {
-      "id": "73a7",
-      "subject": "awdaw",
-      "email": "abasnigrityanov@gmail.com",
-      "message": "awdawdawd"
+      "message": "a's;lk'as;klj"
     }
   ]
 }

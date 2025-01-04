@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { supabase } from "./createClient";
 import "../index.css";
 
 const HomePage = () => {
@@ -10,30 +9,35 @@ const HomePage = () => {
     fetchFeaturedRecipe();
   }, []);
 
+  /**
+   * Fetch the newest recipe from JSON Server by sorting
+   * on `lastUpdated` in descending order.
+   */
   const fetchFeaturedRecipe = async () => {
     try {
-      const { data, error } = await supabase
-        .from("Recipes")
-        .select("*")
-        .order("lastUpdated", { ascending: false })
-        .limit(1);
-      if (error) {
-        console.error(error);
-        return;
+      const response = await fetch(
+        "http://localhost:3000/Recipes?_sort=lastUpdated&_order=desc&_limit=1"
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch featured recipe from JSON Server");
       }
+      const data = await response.json();
       if (data && data.length > 0) {
         setFeaturedRecipe(data[0]);
       }
     } catch (err) {
-      console.error(err);
+      console.error("Error fetching featured recipe:", err);
     }
   };
 
+  /**
+   * Example projects array. Adjust as needed.
+   */
   const projects = [
     {
       title: "Project 1: AutoForm Filler",
       description: "A tool to automatically fill out job application forms.",
-      link: "https://github.com/Ibrahim2307/web_and_mobile_project1",
+      link: "https://github.com/username/web_and_mobile_project1",
     },
   ];
 
@@ -98,22 +102,27 @@ const HomePage = () => {
             <p>
               <strong>Description:</strong> {featuredRecipe.description}
             </p>
-            {Array.isArray(featuredRecipe.tags) && featuredRecipe.tags.length > 0 && (
-              <p>
-                <strong>Tags:</strong> {featuredRecipe.tags.join(", ")}
-              </p>
-            )}
+            {Array.isArray(featuredRecipe.tags) &&
+              featuredRecipe.tags.length > 0 && (
+                <p>
+                  <strong>Tags:</strong>{" "}
+                  {featuredRecipe.tags.join(", ")}
+                </p>
+              )}
             {Array.isArray(featuredRecipe.ingredients) &&
               featuredRecipe.ingredients.length > 0 && (
                 <p>
-                  <strong>Ingredients:</strong> {featuredRecipe.ingredients.join(", ")}
+                  <strong>Ingredients:</strong>{" "}
+                  {featuredRecipe.ingredients.join(", ")}
                 </p>
               )}
-            {Array.isArray(featuredRecipe.steps) && featuredRecipe.steps.length > 0 && (
-              <p>
-                <strong>Steps:</strong> {featuredRecipe.steps.join(", ")}
-              </p>
-            )}
+            {Array.isArray(featuredRecipe.steps) &&
+              featuredRecipe.steps.length > 0 && (
+                <p>
+                  <strong>Steps:</strong>{" "}
+                  {featuredRecipe.steps.join(", ")}
+                </p>
+              )}
             <p>
               <strong>Difficulty:</strong> {featuredRecipe.difficulty}
             </p>

@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HomePage from './HomePage';
 import RecipePage from './RecipePage';
 import ContactPage from './ContactPage';
-import { supabase } from './createClient';
 
 
 function App() {
