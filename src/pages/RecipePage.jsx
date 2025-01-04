@@ -21,15 +21,11 @@ function RecipeCard({
   const [ingredients, setIngredients] = useState(recipe?.ingredients || []);
   const [steps, setSteps] = useState(recipe?.steps || []);
   const [difficulty, setDifficulty] = useState(recipe?.difficulty || "Easy");
-  const [lastUpdated, setLastUpdated] = useState(
+  const [lastUpdated] = useState(
     recipe?.lastUpdated ? new Date(recipe.lastUpdated) : new Date()
   );
 
-  /**
-   * Whenever `recipe` prop changes (e.g., the user selects a different recipe),
-   * we reset our local state. This also ensures after "Save" or "Cancel",
-   * the card reverts to the latest data.
-   */
+  // Reset local state whenever the `recipe` prop changes
   useEffect(() => {
     setTitle(recipe?.title || "");
     setDescription(recipe?.description || "");
@@ -37,9 +33,6 @@ function RecipeCard({
     setIngredients(recipe?.ingredients || []);
     setSteps(recipe?.steps || []);
     setDifficulty(recipe?.difficulty || "Easy");
-    setLastUpdated(
-      recipe?.lastUpdated ? new Date(recipe.lastUpdated) : new Date()
-    );
     setEditMode(false);
   }, [recipe]);
 
@@ -63,16 +56,13 @@ function RecipeCard({
   };
 
   const handleCancel = () => {
-    // Revert edits to original
+    // Revert local state to original
     setTitle(recipe?.title || "");
     setDescription(recipe?.description || "");
     setTags(recipe?.tags || []);
     setIngredients(recipe?.ingredients || []);
     setSteps(recipe?.steps || []);
     setDifficulty(recipe?.difficulty || "Easy");
-    setLastUpdated(
-      recipe?.lastUpdated ? new Date(recipe.lastUpdated) : new Date()
-    );
     setEditMode(false);
   };
 
@@ -93,44 +83,48 @@ function RecipeCard({
         onChange={() => onSelectChange(recipe.id)}
       />
 
-      {/* View Mode */}
+      {/* VIEW MODE */}
       {!editMode && (
         <div className="recipe-card-view">
           <h3 className="recipe-title">{recipe.title}</h3>
           <p className="recipe-description">
             <strong>Description:</strong> {recipe.description}
           </p>
+
           {Array.isArray(recipe.tags) && recipe.tags.length > 0 && (
             <p className="recipe-tags">
               <strong>Tags:</strong> {recipe.tags.join(", ")}
             </p>
           )}
+
           {Array.isArray(recipe.ingredients) && recipe.ingredients.length > 0 && (
             <div className="recipe-ingredients">
               <strong>Ingredients:</strong>
               <ul className="ingredient-list">
-                {recipe.ingredients.map((ing, i) => (
-                  <li key={i}>{ing}</li>
+                {recipe.ingredients.map((ing, idx) => (
+                  <li key={idx}>{ing}</li>
                 ))}
               </ul>
             </div>
           )}
+
           {Array.isArray(recipe.steps) && recipe.steps.length > 0 && (
             <div className="recipe-steps">
               <strong>Steps:</strong>
               <ol className="step-list">
-                {recipe.steps.map((st, i) => (
-                  <li key={i}>{st}</li>
+                {recipe.steps.map((step, idx) => (
+                  <li key={idx}>{step}</li>
                 ))}
               </ol>
             </div>
           )}
+
           <p className="recipe-difficulty">
             <strong>Difficulty:</strong> {recipe.difficulty}
           </p>
           <p>
             <strong>Last Updated:</strong>{" "}
-            {new Date(recipe.lastUpdated).toLocaleDateString()}
+            {new Date(recipe.lastUpdated).toLocaleString()}
           </p>
           <div className="button-group">
             <button className="btn btn-edit" onClick={() => setEditMode(true)}>
@@ -143,7 +137,7 @@ function RecipeCard({
         </div>
       )}
 
-      {/* Edit Mode */}
+      {/* EDIT MODE */}
       {editMode && (
         <div className="edit-form">
           <div className="edit-field">
@@ -231,7 +225,7 @@ function RecipeCard({
 }
 
 /**
- * Main RecipePage component
+ * Main component: displays recipe list with SWAP-based drag and drop
  */
 export default function RecipePage() {
   const [recipes, setRecipes] = useState([]);
@@ -245,16 +239,18 @@ export default function RecipePage() {
     difficulty: "Easy",
   });
 
+  // Filters and search
   const [difficultyFilter, setDifficultyFilter] = useState("");
   const [tagFilter, setTagFilter] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
-
   const [sortOption, setSortOption] = useState("");
 
+  // Pagination
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
   const [totalPages, setTotalPages] = useState(0);
 
+  // Multi-select
   const [selectedRecipeIds, setSelectedRecipeIds] = useState([]);
 
   // --------------------------------------------------------------------------
@@ -276,6 +272,7 @@ export default function RecipePage() {
         const to = from + pageSize - 1;
 
         // 3) Fetch only for current page, sorted by 'order'
+        // For direct-swap to persist across refreshes, we rely on 'order' in the DB
         const responsePage = await fetch(
           `http://localhost:3000/Recipes?_sort=order&_order=asc&_start=${from}&_end=${to + 1}`
         );
@@ -294,13 +291,12 @@ export default function RecipePage() {
   }, [currentPage, pageSize]);
 
   // --------------------------------------------------------------------------
-  // DRAG AND DROP
+  // DRAG AND DROP (SWAP-BASED)
   // --------------------------------------------------------------------------
   /**
-   * When a card is dropped, we reorder the **currently visible** recipes array
-   * so that the moved item goes to the new index, and the item originally there
-   * moves accordingly. Then we PATCH each updated recipe's "order" field so
-   * that changes persist across page refreshes.
+   * Instead of reordering (inserting the dragged card at a new index),
+   * we do a **direct swap**. So if you drag item from `source.index`
+   * to `destination.index`, those two items swap places in the array.
    */
   const handleDragEnd = async (result) => {
     if (!result.destination) return;
@@ -309,28 +305,25 @@ export default function RecipePage() {
     const draggedIndex = source.index;
     const droppedIndex = destination.index;
 
-    // 1) Make a copy of the current recipe array
-    const reordered = Array.from(recipes);
+    // Make a copy of the current list
+    const swapped = [...recipes];
 
-    // 2) Remove the item from the old position
-    const [movedItem] = reordered.splice(draggedIndex, 1);
+    // SWAP the two items directly
+    const temp = swapped[draggedIndex];
+    swapped[draggedIndex] = swapped[droppedIndex];
+    swapped[droppedIndex] = temp;
 
-    // 3) Insert it at the new position
-    reordered.splice(droppedIndex, 0, movedItem);
-
-    // 4) Reassign the "order" based on new positions
-    //    We only do this for the recipes on this page
-    const updatedReordered = reordered.map((rec, idx) => ({
+    // Now recalculate the "order" for each item on this page
+    const updatedSwapped = swapped.map((rec, idx) => ({
       ...rec,
       order: (currentPage - 1) * pageSize + (idx + 1),
     }));
 
-    // 5) Update state
-    setRecipes(updatedReordered);
+    setRecipes(updatedSwapped);
 
-    // 6) Persist changes to JSON Server with PATCH
+    // Persist new order to JSON Server
     try {
-      for (const item of updatedReordered) {
+      for (const item of updatedSwapped) {
         const response = await fetch(`http://localhost:3000/Recipes/${item.id}`, {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
@@ -342,9 +335,9 @@ export default function RecipePage() {
           throw new Error("Failed to update recipe order");
         }
       }
-      console.log("Order updated successfully in the JSON server");
+      console.log("SWAP order updated successfully in the JSON server");
     } catch (err) {
-      console.error("Error during order update:", err);
+      console.error("Error during swap order update:", err);
     }
   };
 
@@ -420,7 +413,7 @@ export default function RecipePage() {
         .map((item) => item.trim())
         .filter(Boolean);
 
-      // Get the next order value
+      // Determine the next order
       const responseAll = await fetch("http://localhost:3000/Recipes");
       const allRecipes = await responseAll.json();
       const count = allRecipes.length;
@@ -443,14 +436,13 @@ export default function RecipePage() {
           order: nextOrder,
         }),
       });
-
       if (!response.ok) {
         const errorText = await response.text();
         console.error("Server error text:", errorText);
         throw new Error("Failed to create new recipe");
       }
 
-      // Reset the form and go back to page 1 to see the new item
+      // Reset form, go back to page 1 to see the new item
       setCurrentPage(1);
       setIsCreating(false);
       setNewRecipe({
@@ -581,7 +573,7 @@ Last Updated: ${new Date(r.lastUpdated).toLocaleString()}`;
   // --------------------------------------------------------------------------
   return (
     <div className="recipe-page">
-      <h2>Recipe List</h2>
+      <h2>Recipe List (SWAP Drag & Drop)</h2>
 
       {/* Filter, Search, and Sort Controls */}
       <div className="filter-sort-controls">
@@ -676,7 +668,9 @@ Last Updated: ${new Date(r.lastUpdated).toLocaleString()}`;
             <input
               type="text"
               value={newRecipe.tags}
-              onChange={(e) => setNewRecipe({ ...newRecipe, tags: e.target.value })}
+              onChange={(e) =>
+                setNewRecipe({ ...newRecipe, tags: e.target.value })
+              }
             />
           </label>
           <label>
@@ -696,7 +690,7 @@ Last Updated: ${new Date(r.lastUpdated).toLocaleString()}`;
         </div>
       )}
 
-      {/* Drag & Drop Context */}
+      {/* DRAG & DROP CONTEXT (SWAP) */}
       <DragDropContext onDragEnd={handleDragEnd}>
         <Droppable droppableId="recipe-list">
           {(provided) => (
