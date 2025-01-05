@@ -2,9 +2,6 @@ import React, { useState, useEffect, useMemo } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import "../index.css";
 
-/**
- * Inline RecipeCard component
- */
 function RecipeCard({
   recipe,
   isSelected,
@@ -25,11 +22,6 @@ function RecipeCard({
     recipe?.lastUpdated ? new Date(recipe.lastUpdated) : new Date()
   );
 
-  /**
-   * Whenever `recipe` prop changes (e.g., the user selects a different recipe),
-   * we reset our local state. This also ensures after "Save" or "Cancel",
-   * the card reverts to the latest data.
-   */
   useEffect(() => {
     setTitle(recipe?.title || "");
     setDescription(recipe?.description || "");
@@ -105,16 +97,17 @@ function RecipeCard({
               <strong>Tags:</strong> {recipe.tags.join(", ")}
             </p>
           )}
-          {Array.isArray(recipe.ingredients) && recipe.ingredients.length > 0 && (
-            <div className="recipe-ingredients">
-              <strong>Ingredients:</strong>
-              <ul className="ingredient-list">
-                {recipe.ingredients.map((ing, i) => (
-                  <li key={i}>{ing}</li>
-                ))}
-              </ul>
-            </div>
-          )}
+          {Array.isArray(recipe.ingredients) &&
+            recipe.ingredients.length > 0 && (
+              <div className="recipe-ingredients">
+                <strong>Ingredients:</strong>
+                <ul className="ingredient-list">
+                  {recipe.ingredients.map((ing, i) => (
+                    <li key={i}>{ing}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
           {Array.isArray(recipe.steps) && recipe.steps.length > 0 && (
             <div className="recipe-steps">
               <strong>Steps:</strong>
@@ -230,9 +223,6 @@ function RecipeCard({
   );
 }
 
-/**
- * Main RecipePage component
- */
 export default function RecipePage() {
   const [recipes, setRecipes] = useState([]);
   const [isCreating, setIsCreating] = useState(false);
@@ -257,9 +247,7 @@ export default function RecipePage() {
 
   const [selectedRecipeIds, setSelectedRecipeIds] = useState([]);
 
-  // --------------------------------------------------------------------------
-  // FETCH RECIPES (PAGINATED)
-  // --------------------------------------------------------------------------
+
   useEffect(() => {
     const fetchRecipes = async () => {
       try {
@@ -277,7 +265,9 @@ export default function RecipePage() {
 
         // 3) Fetch only for current page, sorted by 'order'
         const responsePage = await fetch(
-          `http://localhost:3000/Recipes?_sort=order&_order=asc&_start=${from}&_end=${to + 1}`
+          `http://localhost:3000/Recipes?_sort=order&_order=asc&_start=${from}&_end=${
+            to + 1
+          }`
         );
         if (!responsePage.ok) {
           throw new Error("Failed to fetch paginated recipes");
@@ -293,15 +283,6 @@ export default function RecipePage() {
     fetchRecipes();
   }, [currentPage, pageSize]);
 
-  // --------------------------------------------------------------------------
-  // DRAG AND DROP
-  // --------------------------------------------------------------------------
-  /**
-   * When a card is dropped, we reorder the **currently visible** recipes array
-   * so that the moved item goes to the new index, and the item originally there
-   * moves accordingly. Then we PATCH each updated recipe's "order" field so
-   * that changes persist across page refreshes.
-   */
   const handleDragEnd = async (result) => {
     if (!result.destination) return;
 
@@ -309,33 +290,29 @@ export default function RecipePage() {
     const draggedIndex = source.index;
     const droppedIndex = destination.index;
 
-    // 1) Make a copy of the current recipe array
     const reordered = Array.from(recipes);
 
-    // 2) Remove the item from the old position
     const [movedItem] = reordered.splice(draggedIndex, 1);
 
-    // 3) Insert it at the new position
     reordered.splice(droppedIndex, 0, movedItem);
 
-    // 4) Reassign the "order" based on new positions
-    //    We only do this for the recipes on this page
     const updatedReordered = reordered.map((rec, idx) => ({
       ...rec,
       order: (currentPage - 1) * pageSize + (idx + 1),
     }));
 
-    // 5) Update state
     setRecipes(updatedReordered);
 
-    // 6) Persist changes to JSON Server with PATCH
     try {
       for (const item of updatedReordered) {
-        const response = await fetch(`http://localhost:3000/Recipes/${item.id}`, {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ order: item.order }),
-        });
+        const response = await fetch(
+          `http://localhost:3000/Recipes/${item.id}`,
+          {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ order: item.order }),
+          }
+        );
         if (!response.ok) {
           const errorText = await response.text();
           console.error("Server error text:", errorText);
@@ -348,9 +325,6 @@ export default function RecipePage() {
     }
   };
 
-  // --------------------------------------------------------------------------
-  // CREATE, UPDATE, DELETE
-  // --------------------------------------------------------------------------
   const handleUpdateRecipe = async (updatedRecipe) => {
     try {
       // PATCH the updated recipe
@@ -466,9 +440,6 @@ export default function RecipePage() {
     }
   };
 
-  // --------------------------------------------------------------------------
-  // MULTI-SELECT
-  // --------------------------------------------------------------------------
   const handleSelectChange = (id) => {
     setSelectedRecipeIds((prev) => {
       if (prev.includes(id)) return prev.filter((item) => item !== id);
@@ -501,9 +472,6 @@ Last Updated: ${new Date(r.lastUpdated).toLocaleString()}`;
     window.open(mailtoURL, "_blank");
   };
 
-  // --------------------------------------------------------------------------
-  // FILTER & SORT
-  // --------------------------------------------------------------------------
   const filteredAndSortedRecipes = useMemo(() => {
     let output = [...recipes];
 
@@ -563,9 +531,6 @@ Last Updated: ${new Date(r.lastUpdated).toLocaleString()}`;
     return output;
   }, [recipes, searchQuery, difficultyFilter, tagFilter, sortOption]);
 
-  // --------------------------------------------------------------------------
-  // PAGINATION
-  // --------------------------------------------------------------------------
   const handleNextPage = () => {
     if (currentPage >= totalPages || totalPages === 0) return;
     setCurrentPage((prev) => prev + 1);
@@ -576,9 +541,6 @@ Last Updated: ${new Date(r.lastUpdated).toLocaleString()}`;
     setCurrentPage((prev) => prev - 1);
   };
 
-  // --------------------------------------------------------------------------
-  // RENDER
-  // --------------------------------------------------------------------------
   return (
     <div className="recipe-page">
       <h2>Recipe List</h2>
@@ -676,7 +638,9 @@ Last Updated: ${new Date(r.lastUpdated).toLocaleString()}`;
             <input
               type="text"
               value={newRecipe.tags}
-              onChange={(e) => setNewRecipe({ ...newRecipe, tags: e.target.value })}
+              onChange={(e) =>
+                setNewRecipe({ ...newRecipe, tags: e.target.value })
+              }
             />
           </label>
           <label>
