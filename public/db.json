@@ -98,7 +98,7 @@
       ],
       "difficulty": "Hard",
       "lastUpdated": "2025-01-04T21:06:01.713Z",
-      "order": 1
+      "order": 3
     },
     {
       "id": "4",
@@ -572,7 +572,7 @@
     },
     {
       "id": "17",
-      "title": "Brushetta",
+      "title": "Bruschetta",
       "description": "A classic Italian appetizer made with fresh tomatoes, basil, and olive oil.",
       "ingredients": [
         "4 tomatoes, halved and seeded",
@@ -584,7 +584,7 @@
         "In a large bowl, combine the chopped basil, tomatoes, and olive oil.",
         "Season with salt and pepper to taste.",
         "Garnish with fresh basil and serve with bread or pita bread.",
-        "Brushetta is a classic Italian appetizer made with fresh tomatoes, basil, and olive oil."
+        "Bruschetta is a classic Italian appetizer made with fresh tomatoes, basil, and olive oil."
       ],
       "tags": [
         "Italian",
@@ -592,8 +592,95 @@
         "Snack"
       ],
       "difficulty": "Easy",
-      "lastUpdated": "2024-12-20T11:30:00Z",
+      "lastUpdated": "2025-01-05T19:56:31.044Z",
       "order": 16
+    },
+    {
+      "id": "18",
+      "title": "Chicken Parmigiana",
+      "description": "A classic Italian dish made with breaded chicken, tomato sauce, and mozzarella cheese.",
+      "ingredients": [
+        "4 chicken breasts, breaded and coated with panko breadcrumbs",
+        "1/2 cup tomato sauce",
+        "1/2 cup mozzarella cheese",
+        "1/4 cup grated Parmesan cheese",
+        "1/4 cup fresh basil, chopped",
+        "Salt and pepper to taste"
+      ],
+      "steps": [
+        "Preheat the oven to 375°F.",
+        "In a large skillet, heat the tomato sauce over medium heat.",
+        "Add the breaded chicken and cook until the chicken is browned on all sides.",
+        "Stir in the mozzarella cheese and Parmesan cheese.",
+        "Season with salt and pepper to taste.",
+        "Bake in the preheated oven for 20-25 minutes, or until the chicken is cooked through.",
+        "Remove from the oven and garnish with fresh basil and serve with bread or pita bread.",
+        "Chicken Parmigiana is a classic Italian dish made with breaded chicken, tomato sauce, and mozzarella cheese."
+      ],
+      "tags": [
+        "Italian",
+        "Chicken",
+        "Dinner"
+      ],
+      "difficulty": "Hard",
+      "lastUpdated": "2024-12-10T14:20:00Z",
+      "order": 17
+    },
+    {
+      "id": "19",
+      "title": "Fettuccine Alfredo",
+      "description": "A classic Italian pasta dish made with spaghetti, tomato sauce, and Parmesan cheese.",
+      "ingredients": [
+        "500g spaghetti",
+        "1/2 cup tomato sauce",
+        "1/2 cup grated Parmesan cheese",
+        "1/4 cup butter",
+        "Salt and pepper to taste"
+      ],
+      "steps": [
+        "Cook the spaghetti according to the package instructions.",
+        "In a separate pan, heat the tomato sauce and cook until it is thickened.",
+        "In a large bowl, combine the cooked spaghetti, tomato sauce, and Parmesan cheese.",
+        "Drain the spaghetti and return to the pot.",
+        "Stir in the butter and season with salt and pepper to taste.",
+        "Remove from heat and serve immediately.",
+        "Fettuccine Alfredo is a classic Italian pasta dish made with spaghetti, tomato sauce, and Parmesan cheese."
+      ],
+      "tags": [
+        "Italian",
+        "Pasta",
+        "Dinner"
+      ],
+      "difficulty": "Medium",
+      "lastUpdated": "2024-12-15T09:45:00Z",
+      "order": 18
+    },
+    {
+      "id": "20",
+      "title": "French Toast",
+      "description": "A classic American breakfast dish made with bread, eggs, and butter.",
+      "ingredients": [
+        "4 slices bread",
+        "2 eggs",
+        "1/2 cup butter",
+        "Salt and pepper to taste"
+      ],
+      "steps": [
+        "In a separate bowl, whisk together the eggs, salt, and pepper.",
+        "Toast the bread slices in a toaster oven until golden brown.",
+        "In a skillet, heat the butter over medium heat.",
+        "Add the eggs to the skillet and cook until they are cooked to your desired doneness.",
+        "Remove from heat and serve with the toasted bread.",
+        "French Toast is a classic American breakfast dish made with bread, eggs, and butter."
+      ],
+      "tags": [
+        "American",
+        "Breakfast",
+        "Snack"
+      ],
+      "difficulty": "Easy",
+      "lastUpdated": "2024-12-15T09:45:00Z",
+      "order": 19
     }
   ],
   "messages": [
