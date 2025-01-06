@@ -88,9 +88,6 @@ const HomePage = () => {
         <h2>Featured Recipe</h2>
         {featuredRecipe ? (
           <div className="featured-recipe-card">
-            <p>
-              <strong>ID:</strong> {featuredRecipe.id}
-            </p>
             <h3>{featuredRecipe.title}</h3>
             <p>
               <strong>Description:</strong> {featuredRecipe.description}

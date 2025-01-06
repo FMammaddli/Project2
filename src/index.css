@@ -155,6 +155,9 @@ body {
 /* Recipe List Section */
 .recipe-list {
   display: grid;
+  /* If you want to continue using .recipe-list, 
+     you can adjust columns here or remove it 
+     if you’re using .recipe-row below instead. */
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 1.75rem;
   margin-top: 2rem;
@@ -540,7 +543,7 @@ body {
   list-style-type: decimal;
 }
 
-/* Responsive Design */
+/* Responsive Design Tweaks */
 @media (max-width: 1024px) {
   .my-projects-list {
     flex-direction: column;
@@ -659,3 +662,50 @@ body {
     font-size: 0.95rem;
   }
 }
+
+/* ------------------------------------------------------
+   NEW/UPDATED GRID STYLES FOR FULL-WIDTH RECIPE CARDS
+   ------------------------------------------------------ */
+
+/* If you're using a class like .recipe-grid for your DnD or general layout: */
+.recipe-grid {
+  display: grid;
+  /* Each card is at least 250px wide, but grows to fill leftover space */
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+  align-items: start;
+  position: relative;
+  margin-top: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* If you’re using a .recipe-row for a row-based layout, similar approach: */
+.recipe-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  width: 100%;
+  margin: 0 auto;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+/* The "box" that wraps each card in the grid/row: */
+.recipe-box {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1rem;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+/* Keep .recipe-card from stretching unexpectedly */
+.recipe-card.my-4 {
+  width: 100%;
+  box-sizing: border-box;
+  /* other existing styles... */
+}
+
+/* Hide droppable placeholder (if using react-beautiful-dnd) */

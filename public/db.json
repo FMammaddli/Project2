@@ -2,7 +2,7 @@
   "Recipes": [
     {
       "id": "1",
-      "title": "Spaghetti Carbonarabbb",
+      "title": "Spaghetti Carbonara",
       "description": "A classic Italian pasta dish made with eggs, cheese, pancetta, and pepper.",
       "ingredients": [
         "200g spaghetti",
@@ -29,8 +29,8 @@
         "Dinner"
       ],
       "difficulty": "Medium",
-      "lastUpdated": "2025-01-04T16:55:06.705Z",
-      "order": 4
+      "lastUpdated": "2025-01-04T21:05:35.432Z",
+      "order": 1
     },
     {
       "id": "2",
@@ -59,11 +59,11 @@
       ],
       "difficulty": "Easy",
       "lastUpdated": "2024-11-15T08:00:00Z",
-      "order": 1
+      "order": 2
     },
     {
       "id": "3",
-      "title": "Beef Stroganoffkkk",
+      "title": "Beef Stroganoff",
       "description": "A Russian dish of sautéed pieces of beef served in a sauce with smetana (sour cream).",
       "ingredients": [
         "500g beef sirloin, thinly sliced",
@@ -97,8 +97,8 @@
         "Dinner"
       ],
       "difficulty": "Hard",
-      "lastUpdated": "2025-01-04T17:04:16.220Z",
-      "order": 1
+      "lastUpdated": "2025-01-04T21:06:01.713Z",
+      "order": 3
     },
     {
       "id": "4",
@@ -135,7 +135,7 @@
       ],
       "difficulty": "Medium",
       "lastUpdated": "2024-10-10T09:15:00Z",
-      "order": 2
+      "order": 4
     },
     {
       "id": "5",
@@ -293,6 +293,394 @@
       "difficulty": "Medium",
       "lastUpdated": "2024-12-05T18:30:00Z",
       "order": 8
+    },
+    {
+      "id": "9",
+      "title": "Pasta Carbonara",
+      "description": "A classic Italian pasta dish made with eggs, cheese, and pancetta.",
+      "ingredients": [
+        "200g spaghetti",
+        "100g pancetta",
+        "2 large eggs",
+        "50g Pecorino cheese",
+        "50g Parmesan",
+        "2 cloves garlic",
+        "Salt",
+        "Black pepper"
+      ],
+      "steps": [
+        "Boil the spaghetti in salted water according to package instructions.",
+        "Fry the pancetta with garlic until crispy.",
+        "Beat the eggs in a bowl, then mix in the grated Pecorino and Parmesan cheeses.",
+        "Drain the spaghetti and return to the pot.",
+        "Quickly mix in the pancetta and its fat.",
+        "Add the beaten eggs, then season with salt and pepper.",
+        "Remove from heat and stir in the grated cheese.",
+        "Season with black pepper and serve immediately."
+      ],
+      "tags": [
+        "Italian",
+        "Pasta",
+        "Dinner"
+      ],
+      "difficulty": "Medium",
+      "lastUpdated": "2024-12-10T14:20:00Z",
+      "order": 9
+    },
+    {
+      "id": "10",
+      "title": "Beef Tacos",
+      "description": "Tacos filled with seasoned ground beef, fresh slaw, and a zesty lime crema.",
+      "ingredients": [
+        "500g ground beef",
+        "2 tablespoons olive oil",
+        "1 teaspoon chili powder",
+        "1 teaspoon cumin",
+        "1/2 teaspoon paprika",
+        "Salt and pepper to taste",
+        "8 small tortillas",
+        "For the slaw:",
+        "2 cups shredded cabbage",
+        "1/2 red onion, thinly sliced",
+        "1/4 cup fresh cilantro, chopped",
+        "Juice of 1 lime",
+        "Salt to taste",
+        "For the lime crema:",
+        "1/2 cup sour cream",
+        "2 tablespoons mayonnaise",
+        "Juice of 1 lime",
+        "1 teaspoon hot sauce",
+        "Salt to taste"
+      ],
+      "steps": [
+        "In a bowl, toss ground beef with olive oil, chili powder, cumin, paprika, salt, and pepper.",
+        "Heat a skillet over medium-high heat and cook beef for 2-3 minutes on each side until browned and cooked through.",
+        "In another bowl, combine shredded cabbage, red onion, cilantro, lime juice, and salt. Toss well to make the slaw.",
+        "In a small bowl, mix sour cream, mayonnaise, lime juice, hot sauce, and salt to create the lime crema.",
+        "Warm the tortillas in a dry skillet or microwave.",
+        "Assemble the tacos by placing a portion of beef on each tortilla, topping with slaw and a drizzle of lime crema.",
+        "Serve immediately with lime wedges on the side."
+      ],
+      "tags": [
+        "Mexican",
+        "Beef",
+        "Dinner"
+      ],
+      "difficulty": "Hard",
+      "lastUpdated": "2024-12-15T10:45:00Z",
+      "order": 10
+    },
+    {
+      "id": "11",
+      "title": "Pancakes",
+      "description": "Fluffy and light pancakes perfect for a hearty breakfast.",
+      "ingredients": [
+        "1 1/2 cups all-purpose flour",
+        "3 1/2 teaspoons baking powder",
+        "1 teaspoon salt",
+        "1 tablespoon white sugar",
+        "1 1/4 cups milk",
+        "1 egg",
+        "3 tablespoons butter, melted"
+      ],
+      "steps": [
+        "In a large bowl, sift together the flour, baking powder, salt, and sugar.",
+        "Make a well in the center and pour in the milk, egg, and melted butter; mix until smooth.",
+        "Heat a lightly oiled griddle or frying pan over medium-high heat.",
+        "Pour or scoop the batter onto the griddle, using approximately 1/4 cup for each pancake.",
+        "Brown on both sides and serve hot with your favorite toppings."
+      ],
+      "tags": [
+        "Breakfast",
+        "Easy",
+        "Fluffy"
+      ],
+      "difficulty": "Easy",
+      "lastUpdated": "2024-11-15T08:00:00Z",
+      "order": 11
+    },
+    {
+      "id": "12",
+      "title": "Caesar Salad",
+      "description": "A classic salad with romaine lettuce, croutons, and Caesar dressing.",
+      "ingredients": [
+        "1 head romaine lettuce",
+        "1/2 cup croutons",
+        "1/4 cup grated Parmesan cheese",
+        "1/4 cup Caesar dressing",
+        "1/4 cup lemon juice",
+        "Salt and pepper to taste"
+      ],
+      "steps": [
+        "Wash and dry the romaine lettuce.",
+        "Tear the croutons into small pieces.",
+        "In a large bowl, combine the lettuce, croutons, Parmesan cheese, Caesar dressing, lemon juice, salt, and pepper.",
+        "Garnish with additional Parmesan cheese and serve immediately."
+      ],
+      "tags": [
+        "Salad",
+        "Vegetarian",
+        "Easy"
+      ],
+      "difficulty": "Easy",
+      "lastUpdated": "2024-10-20T12:30:00Z",
+      "order": 11
+    },
+    {
+      "id": "13",
+      "title": "Mushroom Risotto",
+      "description": "Creamy and flavorful risotto made with Arborio rice, mushrooms, and Parmesan cheese.",
+      "ingredients": [
+        "1 cup Arborio rice",
+        "8 ounces mushrooms, sliced",
+        "1 cup vegetable broth",
+        "1/2 cup dry white wine",
+        "1/4 cup butter",
+        "1/4 cup Parmesan cheese",
+        "1/4 cup fresh parsley, chopped",
+        "Salt and pepper to taste"
+      ],
+      "steps": [
+        "In a saucepan, bring the wine and butter to a boil.",
+        "Add the Arborio rice and cook for 2 minutes.",
+        "Gradually add the broth, stirring constantly, until the rice is cooked and the liquid is absorbed.",
+        "Stir in the sliced mushrooms and cook for another 5-7 minutes until the mushrooms are tender.",
+        "Add the Parmesan cheese and fresh parsley, stir to combine.",
+        "Season with salt and pepper to taste.",
+        "Serve hot and garnish with additional Parmesan cheese and fresh parsley."
+      ],
+      "tags": [
+        "Italian",
+        "Risotto",
+        "Vegetarian"
+      ],
+      "difficulty": "Hard",
+      "lastUpdated": "2024-12-01T09:15:00Z",
+      "order": 12
+    },
+    {
+      "id": "14",
+      "title": "Chicken Curry",
+      "description": "A flavorful curry made with tender chicken, onions, and coconut milk.",
+      "ingredients": [
+        "500g chicken, cut into pieces",
+        "1 onion, finely chopped",
+        "2 tablespoons curry powder",
+        "1 teaspoon cumin",
+        "1 teaspoon paprika",
+        "1 teaspoon turmeric",
+        "1/2 cup coconut milk",
+        "1/4 cup water",
+        "Salt to taste",
+        "Fresh cilantro, chopped (for garnish)"
+      ],
+      "steps": [
+        "In a large pot, heat oil and sauté onions until golden.",
+        "Add chicken pieces and cook until browned on all sides.",
+        "Stir in curry powder, cumin, paprika, and turmeric. Cook for another minute.",
+        "Pour in coconut milk and water. Bring to a simmer. Cover and cook for 20-25 minutes.",
+        "Season with salt to taste.",
+        "Garnish with fresh cilantro and serve with rice or naan bread."
+      ],
+      "tags": [
+        "Indian",
+        "Chicken",
+        "Curry",
+        "Dinner"
+      ],
+      "difficulty": "Medium",
+      "lastUpdated": "2024-12-05T18:30:00Z",
+      "order": 13
+    },
+    {
+      "id": "15",
+      "title": "Shepherd's Pie",
+      "description": "A classic American dish with ground beef, onions, and tomatoes, topped with a flaky pastry crust.",
+      "ingredients": [
+        "500g ground beef",
+        "1 onion, finely chopped",
+        "2 cloves garlic, minced",
+        "2 tablespoons tomato paste",
+        "1/2 cup water",
+        "1/4 cup dry breadcrumbs",
+        "1/4 cup grated Parmesan cheese",
+        "1/4 cup grated mozzarella cheese",
+        "1/4 cup fresh basil, chopped",
+        "1 egg, beaten",
+        "Flaky pastry crust"
+      ],
+      "steps": [
+        "In a large skillet, cook the ground beef until browned on all sides.",
+        "Add the chopped onions and sauté until golden.",
+        "Add the minced garlic and cook for another minute.",
+        "Stir in the tomato paste and water. Bring to a simmer.",
+        "Stir in the breadcrumbs, Parmesan cheese, mozzarella cheese, and chopped basil.",
+        "Remove from heat and let the mixture rest for 5-10 minutes.",
+        "Preheat the oven to 375°F.",
+        "Roll out the flaky pastry crust.",
+        "Spread the ground beef mixture on the crust.",
+        "Bake in the preheated oven for 20-25 minutes, or until the crust is golden and bubbly.",
+        "Remove from the oven and let cool for a few minutes before slicing and serving."
+      ],
+      "tags": [
+        "American",
+        "Pie",
+        "Dinner"
+      ],
+      "difficulty": "Hard",
+      "lastUpdated": "2024-12-10T14:20:00Z",
+      "order": 14
+    },
+    {
+      "id": "16",
+      "title": "Lasagna",
+      "description": "A classic Italian dish made with layers of noodles, meat sauce, and cheese.",
+      "ingredients": [
+        "8 lasagna noodles",
+        "1/2 cup ricotta cheese",
+        "1/2 cup mozzarella cheese",
+        "1/2 cup grated Parmesan cheese",
+        "1/4 cup tomato sauce",
+        "1/4 cup tomato paste",
+        "1/4 cup water",
+        "1/4 cup ground beef",
+        "1/4 cup onion",
+        "1/4 cup garlic",
+        "Salt and pepper to taste"
+      ],
+      "steps": [
+        "Cook the lasagna noodles according to the package directions.",
+        "In a small bowl, combine the ricotta cheese, mozzarella cheese, and Parmesan cheese.",
+        "In a separate bowl, combine the tomato sauce, tomato paste, and water.",
+        "In a large skillet, heat the ground beef and onion over medium heat.",
+        "Add the minced garlic and cook until fragrant.",
+        "Add the tomato mixture to the skillet and bring to a simmer.",
+        "Stir in the cooked lasagna noodles and the cheese mixture.",
+        "Season with salt and pepper to taste.",
+        "Layer the lasagna according to the package instructions.",
+        "Bake in the preheated oven for 30-35 minutes, or until the lasagna is cooked through.",
+        "Let cool for a few minutes before slicing and serving."
+      ],
+      "tags": [
+        "Italian",
+        "Lasagna",
+        "Dinner"
+      ],
+      "difficulty": "Hard",
+      "lastUpdated": "2024-12-15T09:45:00Z",
+      "order": 15
+    },
+    {
+      "id": "17",
+      "title": "Bruschetta",
+      "description": "A classic Italian appetizer made with fresh tomatoes, basil, and olive oil.",
+      "ingredients": [
+        "4 tomatoes, halved and seeded",
+        "1/2 cup fresh basil, chopped",
+        "2 tablespoons olive oil",
+        "Salt and pepper to taste"
+      ],
+      "steps": [
+        "In a large bowl, combine the chopped basil, tomatoes, and olive oil.",
+        "Season with salt and pepper to taste.",
+        "Garnish with fresh basil and serve with bread or pita bread.",
+        "Bruschetta is a classic Italian appetizer made with fresh tomatoes, basil, and olive oil."
+      ],
+      "tags": [
+        "Italian",
+        "Appetizer",
+        "Snack"
+      ],
+      "difficulty": "Easy",
+      "lastUpdated": "2025-01-05T19:56:31.044Z",
+      "order": 16
+    },
+    {
+      "id": "18",
+      "title": "Chicken Parmigiana",
+      "description": "A classic Italian dish made with breaded chicken, tomato sauce, and mozzarella cheese.",
+      "ingredients": [
+        "4 chicken breasts, breaded and coated with panko breadcrumbs",
+        "1/2 cup tomato sauce",
+        "1/2 cup mozzarella cheese",
+        "1/4 cup grated Parmesan cheese",
+        "1/4 cup fresh basil, chopped",
+        "Salt and pepper to taste"
+      ],
+      "steps": [
+        "Preheat the oven to 375°F.",
+        "In a large skillet, heat the tomato sauce over medium heat.",
+        "Add the breaded chicken and cook until the chicken is browned on all sides.",
+        "Stir in the mozzarella cheese and Parmesan cheese.",
+        "Season with salt and pepper to taste.",
+        "Bake in the preheated oven for 20-25 minutes, or until the chicken is cooked through.",
+        "Remove from the oven and garnish with fresh basil and serve with bread or pita bread.",
+        "Chicken Parmigiana is a classic Italian dish made with breaded chicken, tomato sauce, and mozzarella cheese."
+      ],
+      "tags": [
+        "Italian",
+        "Chicken",
+        "Dinner"
+      ],
+      "difficulty": "Hard",
+      "lastUpdated": "2024-12-10T14:20:00Z",
+      "order": 17
+    },
+    {
+      "id": "19",
+      "title": "Fettuccine Alfredo",
+      "description": "A classic Italian pasta dish made with spaghetti, tomato sauce, and Parmesan cheese.",
+      "ingredients": [
+        "500g spaghetti",
+        "1/2 cup tomato sauce",
+        "1/2 cup grated Parmesan cheese",
+        "1/4 cup butter",
+        "Salt and pepper to taste"
+      ],
+      "steps": [
+        "Cook the spaghetti according to the package instructions.",
+        "In a separate pan, heat the tomato sauce and cook until it is thickened.",
+        "In a large bowl, combine the cooked spaghetti, tomato sauce, and Parmesan cheese.",
+        "Drain the spaghetti and return to the pot.",
+        "Stir in the butter and season with salt and pepper to taste.",
+        "Remove from heat and serve immediately.",
+        "Fettuccine Alfredo is a classic Italian pasta dish made with spaghetti, tomato sauce, and Parmesan cheese."
+      ],
+      "tags": [
+        "Italian",
+        "Pasta",
+        "Dinner"
+      ],
+      "difficulty": "Medium",
+      "lastUpdated": "2024-12-15T09:45:00Z",
+      "order": 18
+    },
+    {
+      "id": "20",
+      "title": "French Toast",
+      "description": "A classic American breakfast dish made with bread, eggs, and butter.",
+      "ingredients": [
+        "4 slices bread",
+        "2 eggs",
+        "1/2 cup butter",
+        "Salt and pepper to taste"
+      ],
+      "steps": [
+        "In a separate bowl, whisk together the eggs, salt, and pepper.",
+        "Toast the bread slices in a toaster oven until golden brown.",
+        "In a skillet, heat the butter over medium heat.",
+        "Add the eggs to the skillet and cook until they are cooked to your desired doneness.",
+        "Remove from heat and serve with the toasted bread.",
+        "French Toast is a classic American breakfast dish made with bread, eggs, and butter."
+      ],
+      "tags": [
+        "American",
+        "Breakfast",
+        "Snack"
+      ],
+      "difficulty": "Easy",
+      "lastUpdated": "2024-12-15T09:45:00Z",
+      "order": 19
     }
   ],
   "messages": [
