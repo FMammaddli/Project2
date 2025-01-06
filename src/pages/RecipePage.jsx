@@ -3,10 +3,6 @@ import ReactDOM from "react-dom";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import "../index.css";
 
-/* ------------------------------------------------------------------------
-  1) PORTAL: We'll render the dragged item in a portal so it won't disrupt
-     the layout in the droppable container.
------------------------------------------------------------------------- */
 function DragPortal({ children }) {
   const portalNodeRef = useRef(null);
   if (!portalNodeRef.current) {
@@ -17,13 +13,6 @@ function DragPortal({ children }) {
   return ReactDOM.createPortal(children, portalNodeRef.current);
 }
 
-/* ------------------------------------------------------------------------
-  2) PortalAwareDraggable:
-     - Renders the item in normal flow, but when "isDragging" => we place
-       that element in a <DragPortal>, so it floats outside the list.
-     - We do "visibility: hidden" (not "display: none") on the original
-       so it still occupies space in the layout => no shift of siblings.
------------------------------------------------------------------------- */
 function PortalAwareDraggable({ draggableId, index, children }) {
   return (
     <Draggable draggableId={draggableId} index={index}>
@@ -36,7 +25,6 @@ function PortalAwareDraggable({ draggableId, index, children }) {
             {...provided.draggableProps}
             {...provided.dragHandleProps}
             style={{
-              // Keep the original item in flow so it doesn't shift others
               ...provided.draggableProps.style,
               visibility: isDragging ? "hidden" : "visible",
             }}
@@ -45,23 +33,18 @@ function PortalAwareDraggable({ draggableId, index, children }) {
           </div>
         );
 
-        // If not dragging, render normally in place
         if (!isDragging) return child;
 
-        // If dragging, render the same node in a Portal
         return (
           <>
-            {child /* keeps layout space occupied (invisible) */}
+            {child}
             <DragPortal>
-              {/* The floating clone, same children, same style (except we remove 'visibility') */}
               <div
                 style={{
-                  // Because we’re outside the list, we must replicate the transform
                   ...provided.draggableProps.style,
-                  pointerEvents: "none", // or 'auto' if you prefer
+                  pointerEvents: "none",
                   width: provided.draggableProps.style?.width || "auto",
                   height: provided.draggableProps.style?.height || "auto",
-                  // Could add a shadow or background if you like:
                   boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
                   borderRadius: "8px",
                   background: "white",
@@ -78,9 +61,6 @@ function PortalAwareDraggable({ draggableId, index, children }) {
   );
 }
 
-/* ------------------------------------------------------------------------
-  3) RecipeCard: your existing card component, same as always
------------------------------------------------------------------------- */
 function RecipeCard({ recipe, isSelected, onSelectChange, onUpdate, onDelete }) {
   const [editMode, setEditMode] = useState(false);
 
@@ -125,12 +105,11 @@ function RecipeCard({ recipe, isSelected, onSelectChange, onUpdate, onDelete }) 
     setDescription(recipe?.description || "");
     setTags(recipe?.tags || []);
     setIngredients(recipe?.ingredients || []);
-    setSteps(recipe?.steps || []);
+    setSteps(recipe?.steps || "");
     setDifficulty(recipe?.difficulty || "Easy");
     setEditMode(false);
   };
 
-  // array fields to comma string
   const tagsString = Array.isArray(tags) ? tags.join(", ") : tags;
   const ingString = Array.isArray(ingredients)
     ? ingredients.join(", ")
@@ -158,6 +137,7 @@ function RecipeCard({ recipe, isSelected, onSelectChange, onUpdate, onDelete }) 
               <strong>Tags:</strong> {recipe.tags.join(", ")}
             </p>
           )}
+
           {Array.isArray(recipe.ingredients) && recipe.ingredients.length > 0 && (
             <div className="recipe-ingredients">
               <strong>Ingredients:</strong>
@@ -168,6 +148,7 @@ function RecipeCard({ recipe, isSelected, onSelectChange, onUpdate, onDelete }) 
               </ul>
             </div>
           )}
+
           {Array.isArray(recipe.steps) && recipe.steps.length > 0 && (
             <div className="recipe-steps">
               <strong>Steps:</strong>
@@ -281,9 +262,6 @@ function RecipeCard({ recipe, isSelected, onSelectChange, onUpdate, onDelete }) 
   );
 }
 
-/**
- * Main RecipePage component
- */
 export default function RecipePage() {
   const [recipes, setRecipes] = useState([]);
   const [isCreating, setIsCreating] = useState(false);
@@ -296,27 +274,20 @@ export default function RecipePage() {
     difficulty: "Easy",
   });
 
-  // filters
   const [difficultyFilter, setDifficultyFilter] = useState("");
   const [tagFilter, setTagFilter] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOption, setSortOption] = useState("");
 
-  // pagination
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
   const [totalPages, setTotalPages] = useState(0);
 
-  // multi-select
   const [selectedRecipeIds, setSelectedRecipeIds] = useState([]);
 
-  // --------------------------------------------------------------------------
-  // FETCH RECIPES (PAGINATED)
-  // --------------------------------------------------------------------------
   useEffect(() => {
     const fetchRecipes = async () => {
       try {
-        // fetch all => get total
         const respAll = await fetch("http://localhost:3000/Recipes");
         if (!respAll.ok) throw new Error("Failed to fetch all recipes");
         const all = await respAll.json();
@@ -325,9 +296,10 @@ export default function RecipePage() {
         const from = (currentPage - 1) * pageSize;
         const to = from + pageSize - 1;
 
-        // 3) Fetch only for current page, sorted by 'order'
-        const responsePage = await fetch(
-          `http://localhost:3000/Recipes?_sort=order&_order=asc&_start=${from}&_end=${to + 1}`
+        const respPage = await fetch(
+          `http://localhost:3000/Recipes?_sort=order&_order=asc&_start=${from}&_end=${
+            to + 1
+          }`
         );
         if (!respPage.ok) throw new Error("Failed to fetch page");
         const data = await respPage.json();
@@ -341,112 +313,83 @@ export default function RecipePage() {
     fetchRecipes();
   }, [currentPage, pageSize]);
 
-  // --------------------------------------------------------------------------
-  // DRAG AND DROP
-  // --------------------------------------------------------------------------
-  /**
-   * When a card is dropped, we reorder the **currently visible** recipes array
-   * so that the moved item goes to the new index, and the item originally there
-   * moves accordingly. Then we PATCH each updated recipe's "order" field so
-   * that changes persist across page refreshes.
-   */
-  const handleDragEnd = async (result) => {
-    if (!result.destination) return;
+  const filteredAndSortedRecipes = useMemo(() => {
+    let output = [...recipes];
+    if (searchQuery) {
+      const q = searchQuery.toLowerCase();
+      output = output.filter((r) => {
+        const t = r.title?.toLowerCase().includes(q);
+        const d = r.description?.toLowerCase().includes(q);
+        const i =
+          Array.isArray(r.ingredients) &&
+          r.ingredients.some((ing) => ing.toLowerCase().includes(q));
+        return t || d || i;
+      });
+    }
+    if (difficultyFilter) {
+      output = output.filter(
+        (r) => r.difficulty.toLowerCase() === difficultyFilter.toLowerCase()
+      );
+    }
+    if (tagFilter) {
+      output = output.filter((r) => {
+        if (!r.tags || !Array.isArray(r.tags)) return false;
+        return r.tags.some((tag) =>
+          tag.toLowerCase().includes(tagFilter.toLowerCase())
+        );
+      });
+    }
+    switch (sortOption) {
+      case "title-asc":
+        output.sort((a, b) => a.title.localeCompare(b.title));
+        break;
+      case "title-desc":
+        output.sort((a, b) => b.title.localeCompare(a.title));
+        break;
+      case "diff-asc":
+        output.sort((a, b) => a.difficulty.localeCompare(b.difficulty));
+        break;
+      case "diff-desc":
+        output.sort((a, b) => b.difficulty.localeCompare(a.difficulty));
+        break;
+      default:
+        break;
+    }
+    return output;
+  }, [recipes, searchQuery, difficultyFilter, tagFilter, sortOption]);
 
+  const onDragEnd = async (result) => {
     const { source, destination } = result;
-    if (!destination) return; // dropped outside
-    if (source.index === destination.index) return; // same => no swap
+    if (!destination) return;
+    if (source.index === destination.index) return;
 
-    // 1) Make a copy of the current recipe array
-    const reordered = Array.from(recipes);
+    const swapped = [...recipes];
+    const temp = swapped[source.index];
+    swapped[source.index] = swapped[destination.index];
+    swapped[destination.index] = temp;
 
-    // 2) Remove the item from the old position
-    const [movedItem] = reordered.splice(draggedIndex, 1);
-
-    // 3) Insert it at the new position
-    reordered.splice(droppedIndex, 0, movedItem);
-
-    // 4) Reassign the "order" based on new positions
-    //    We only do this for the recipes on this page
-    const updatedReordered = reordered.map((rec, idx) => ({
-      ...rec,
-      order: (currentPage - 1) * pageSize + (idx + 1),
+    const updated = swapped.map((r, i) => ({
+      ...r,
+      order: (currentPage - 1) * pageSize + (i + 1),
     }));
+    setRecipes(updated);
 
-    // 5) Update state
-    setRecipes(updatedReordered);
-
-    // 6) Persist changes to JSON Server with PATCH
     try {
-      for (const item of updatedReordered) {
-        const response = await fetch(`http://localhost:3000/Recipes/${item.id}`, {
+      for (const item of updated) {
+        const resp = await fetch(`http://localhost:3000/Recipes/${item.id}`, {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ order: item.order }),
         });
-        if (!response.ok) {
-          const errorText = await response.text();
-          console.error("Server error text:", errorText);
+        if (!resp.ok) {
+          const e = await resp.text();
+          console.error("[DEBUG] patch error =>", e);
           throw new Error("Failed to update recipe order");
         }
       }
       console.log("[DEBUG] Swap saved to JSON server!");
     } catch (err) {
       console.error("[DEBUG] error =>", err);
-    }
-  };
-
-  // --------------------------------------------------------------------------
-  // CREATE, UPDATE, DELETE
-  // --------------------------------------------------------------------------
-  const handleUpdateRecipe = async (updatedRecipe) => {
-    try {
-      // PATCH the updated recipe
-      const response = await fetch(
-        `http://localhost:3000/Recipes/${updatedRecipe.id}`,
-        {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            title: updatedRecipe.title,
-            description: updatedRecipe.description,
-            ingredients: updatedRecipe.ingredients,
-            steps: updatedRecipe.steps,
-            tags: updatedRecipe.tags,
-            difficulty: updatedRecipe.difficulty,
-            lastUpdated: new Date().toISOString(),
-            order: updatedRecipe.order,
-          }),
-        }
-      );
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error("Server error text:", errorText);
-        throw new Error("Failed to update recipe on the server");
-      }
-      // Replace the updated recipe in local state
-      const updatedData = await response.json();
-      setRecipes((prev) =>
-        prev.map((r) => (r.id === updatedData.id ? updatedData : r))
-      );
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const handleDeleteRecipe = async (id) => {
-    try {
-      const response = await fetch(`http://localhost:3000/Recipes/${id}`, {
-        method: "DELETE",
-      });
-      if (!response.ok) {
-        throw new Error("Failed to delete the recipe");
-      }
-      // Remove from local state
-      setRecipes((prev) => prev.filter((r) => r.id !== id));
-      setSelectedRecipeIds((prev) => prev.filter((item) => item !== id));
-    } catch (err) {
-      console.error(err);
     }
   };
 
@@ -465,12 +408,10 @@ export default function RecipePage() {
         .map((x) => x.trim())
         .filter(Boolean);
 
-      // next order
       const respAll = await fetch("http://localhost:3000/Recipes");
       const all = await respAll.json();
       const nextOrder = all.length + 1;
 
-      // POST
       const resp = await fetch("http://localhost:3000/Recipes", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -506,9 +447,49 @@ export default function RecipePage() {
     }
   };
 
-  // --------------------------------------------------------------------------
-  // MULTI-SELECT
-  // --------------------------------------------------------------------------
+  const handleUpdateRecipe = async (upd) => {
+    try {
+      const resp = await fetch(`http://localhost:3000/Recipes/${upd.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: upd.title,
+          description: upd.description,
+          ingredients: upd.ingredients,
+          steps: upd.steps,
+          tags: upd.tags,
+          difficulty: upd.difficulty,
+          lastUpdated: new Date().toISOString(),
+          order: upd.order,
+        }),
+      });
+      if (!resp.ok) {
+        const e = await resp.text();
+        console.error("[DEBUG] update error =>", e);
+        throw new Error("Failed to update recipe");
+      }
+      const updatedData = await resp.json();
+      setRecipes((prev) =>
+        prev.map((r) => (r.id === updatedData.id ? updatedData : r))
+      );
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleDeleteRecipe = async (id) => {
+    try {
+      const resp = await fetch(`http://localhost:3000/Recipes/${id}`, {
+        method: "DELETE",
+      });
+      if (!resp.ok) throw new Error("Failed to delete");
+      setRecipes((prev) => prev.filter((r) => r.id !== id));
+      setSelectedRecipeIds((prev) => prev.filter((x) => x !== id));
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   const handleSelectChange = (id) => {
     setSelectedRecipeIds((prev) => {
       if (prev.includes(id)) return prev.filter((x) => x !== id);
@@ -531,78 +512,14 @@ Difficulty: ${r.difficulty}
 Last Updated: ${new Date(r.lastUpdated).toLocaleString()}`;
       })
       .join("\n\n");
-
-    const mailtoURL = `mailto:?subject=Check out these recipes&body=${encodeURIComponent(
-      details
-    )}`;
-    window.open(mailtoURL, "_blank");
+    window.open(
+      `mailto:?subject=Check out these recipes&body=${encodeURIComponent(
+        details
+      )}`,
+      "_blank"
+    );
   };
 
-  // --------------------------------------------------------------------------
-  // FILTER & SORT
-  // --------------------------------------------------------------------------
-  const filteredAndSortedRecipes = useMemo(() => {
-    let output = [...recipes];
-
-    // Search
-    if (searchQuery) {
-      const query = searchQuery.toLowerCase();
-      output = output.filter((recipe) => {
-        const titleMatch =
-          recipe.title && recipe.title.toLowerCase().includes(query);
-        const descriptionMatch =
-          recipe.description &&
-          recipe.description.toLowerCase().includes(query);
-        const ingredientsMatch =
-          Array.isArray(recipe.ingredients) &&
-          recipe.ingredients.some((ingredient) =>
-            ingredient.toLowerCase().includes(query)
-          );
-        return titleMatch || descriptionMatch || ingredientsMatch;
-      });
-    }
-
-    // Difficulty Filter
-    if (difficultyFilter) {
-      output = output.filter(
-        (r) => r.difficulty.toLowerCase() === difficultyFilter.toLowerCase()
-      );
-    }
-
-    // Tag Filter
-    if (tagFilter) {
-      output = output.filter((r) => {
-        if (!r.tags || !Array.isArray(r.tags)) return false;
-        return r.tags.some((tag) =>
-          tag.toLowerCase().includes(tagFilter.toLowerCase())
-        );
-      });
-    }
-
-    // Sort
-    switch (sortOption) {
-      case "title-asc":
-        output.sort((a, b) => a.title.localeCompare(b.title));
-        break;
-      case "title-desc":
-        output.sort((a, b) => b.title.localeCompare(a.title));
-        break;
-      case "diff-asc":
-        output.sort((a, b) => a.difficulty.localeCompare(b.difficulty));
-        break;
-      case "diff-desc":
-        output.sort((a, b) => b.difficulty.localeCompare(a.difficulty));
-        break;
-      default:
-        break;
-    }
-
-    return output;
-  }, [recipes, searchQuery, difficultyFilter, tagFilter, sortOption]);
-
-  // --------------------------------------------------------------------------
-  // PAGINATION
-  // --------------------------------------------------------------------------
   const handleNextPage = () => {
     if (currentPage >= totalPages || totalPages === 0) return;
     setCurrentPage((p) => p + 1);
@@ -616,7 +533,6 @@ Last Updated: ${new Date(r.lastUpdated).toLocaleString()}`;
     <div className="recipe-page">
       <h2>Recipe List</h2>
 
-      {/* Filter, search, etc */}
       <div className="filter-sort-controls">
         <button onClick={() => setIsCreating((c) => !c)}>
           {isCreating ? "Cancel" : "Create Recipe"}
@@ -662,7 +578,6 @@ Last Updated: ${new Date(r.lastUpdated).toLocaleString()}`;
         )}
       </div>
 
-      {/* Create Form */}
       {isCreating && (
         <div className="create-recipe-form">
           <label>
@@ -731,7 +646,6 @@ Last Updated: ${new Date(r.lastUpdated).toLocaleString()}`;
         </div>
       )}
 
-      {/* Drag & Drop: horizontal list => no placeholder => no shift */}
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="droppable" direction="horizontal">
           {(providedDroppable) => (
@@ -757,14 +671,12 @@ Last Updated: ${new Date(r.lastUpdated).toLocaleString()}`;
                   </div>
                 </PortalAwareDraggable>
               ))}
-              {/* Hide placeholder so it never shifts anything */}
               <div style={{ display: "none" }}>{providedDroppable.placeholder}</div>
             </div>
           )}
         </Droppable>
       </DragDropContext>
 
-      {/* Pagination */}
       <div className="pagination-controls" style={{ marginTop: "1rem" }}>
         <button onClick={handlePrevPage} disabled={currentPage === 1}>
           Previous
