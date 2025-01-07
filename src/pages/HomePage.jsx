@@ -30,7 +30,7 @@ const HomePage = () => {
     {
       title: "Project 1: AutoForm Filler",
       description: "A tool to automatically fill out job application forms.",
-      link: "https://github.com/username/web_and_mobile_project1",
+      link: "https://github.com/Ibrahim2307/web_and_mobile_project1",
     },
   ];
 
