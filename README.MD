@@ -48,6 +48,11 @@ cd <Project2>
 Make sure you have Node.js and npm (or yarn) installed. Then run:
     npm install
 
+Make sure to install the required dependencies of the project:
+
+npm install react-beautiful-dnd
+npm install @dnd-kit/core @dnd-kit/sortable
+
 3. Run json-server
 
 This project uses json-server to handle the contact form submissions.
